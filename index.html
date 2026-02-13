@@ -656,6 +656,7 @@ select#lang {
 <script>
 /* ─── Static Data ─────────────────────────────── */
 const SIGNS = ["Aries","Taurus","Gemini","Cancer","Leo","Virgo","Libra","Scorpio","Sagittarius","Capricorn","Aquarius","Pisces"];
+const ALL_PIDS = ['Lagna','Sun','Moon','Mars','Mercury','Jupiter','Venus','Saturn','Rahu','Ketu'];
 
 const NAKSH = [
   {name:'Ashwini',kw:'Speed, Healing, Initiative'},
@@ -695,18 +696,18 @@ const PLANET_RULES = {
 };
 
 const SIGN_DATA = {
-  Aries:      {kw:'Initiation, Action, Energy',     ruler:'Mars',    el:'Fire',  mod:'Cardinal'},
-  Taurus:     {kw:'Stability, Sensuality, Comfort', ruler:'Venus',   el:'Earth', mod:'Fixed'},
-  Gemini:     {kw:'Communication, Intellect, Versatility',ruler:'Mercury',el:'Air',mod:'Dual'},
-  Cancer:     {kw:'Nurturing, Emotion, Home',        ruler:'Moon',    el:'Water', mod:'Cardinal'},
-  Leo:        {kw:'Creativity, Leadership, Royalty', ruler:'Sun',     el:'Fire',  mod:'Fixed'},
-  Virgo:      {kw:'Service, Analysis, Health',       ruler:'Mercury', el:'Earth', mod:'Dual'},
-  Libra:      {kw:'Harmony, Relationships, Justice', ruler:'Venus',   el:'Air',   mod:'Cardinal'},
-  Scorpio:    {kw:'Transformation, Secrecy, Intensity',ruler:'Mars, Ketu',el:'Water',mod:'Fixed'},
-  Sagittarius:{kw:'Philosophy, Exploration, Wisdom', ruler:'Jupiter', el:'Fire',  mod:'Dual'},
-  Capricorn:  {kw:'Discipline, Ambition, Structure', ruler:'Saturn',  el:'Earth', mod:'Cardinal'},
-  Aquarius:   {kw:'Innovation, Humanitarianism',     ruler:'Saturn, Rahu',el:'Air',mod:'Fixed'},
-  Pisces:     {kw:'Imagination, Spirituality, Compassion',ruler:'Jupiter, Ketu',el:'Water',mod:'Dual'}
+  Aries:      {kw:'Initiation, Action, Energy',               ruler:'Mars',         el:'Fire',  mod:'Cardinal'},
+  Taurus:     {kw:'Stability, Sensuality, Comfort',           ruler:'Venus',        el:'Earth', mod:'Fixed'},
+  Gemini:     {kw:'Communication, Intellect, Versatility',    ruler:'Mercury',      el:'Air',   mod:'Dual'},
+  Cancer:     {kw:'Nurturing, Emotion, Home',                 ruler:'Moon',         el:'Water', mod:'Cardinal'},
+  Leo:        {kw:'Creativity, Leadership, Royalty',          ruler:'Sun',          el:'Fire',  mod:'Fixed'},
+  Virgo:      {kw:'Service, Analysis, Health',                ruler:'Mercury',      el:'Earth', mod:'Dual'},
+  Libra:      {kw:'Harmony, Relationships, Justice',          ruler:'Venus',        el:'Air',   mod:'Cardinal'},
+  Scorpio:    {kw:'Transformation, Secrecy, Intensity',       ruler:'Mars, Ketu',   el:'Water', mod:'Fixed'},
+  Sagittarius:{kw:'Philosophy, Exploration, Wisdom',          ruler:'Jupiter',      el:'Fire',  mod:'Dual'},
+  Capricorn:  {kw:'Discipline, Ambition, Structure',          ruler:'Saturn',       el:'Earth', mod:'Cardinal'},
+  Aquarius:   {kw:'Innovation, Humanitarianism',              ruler:'Saturn, Rahu', el:'Air',   mod:'Fixed'},
+  Pisces:     {kw:'Imagination, Spirituality, Compassion',    ruler:'Jupiter, Ketu',el:'Water', mod:'Dual'}
 };
 
 const HOUSE_KW = {
@@ -729,8 +730,8 @@ const TRANS = {
     title:'South Indian Vedic Astrology Chart',
     subtitle:'Interactive • Drag planets into signs',
     bankTitle:'Planet Bank — Drag into chart',
-    bankTip:'Drag planets from here into a chart sign box. Double-tap a placed planet to return it here.',
-    degHint:'Tap a placed planet to toggle retrograde · Slide up/down to change degree',
+    bankTip:'Drag a planet into a sign. Tap a placed planet to set retrograde. Double-tap to return it here.',
+    degHint:'Slide a placed planet up/down to adjust degree',
     hideSigns:'Hide Signs', showSigns:'Show Signs',
     hideNums:'Hide Numbers', showNums:'Show Numbers',
     clearChart:'Clear Chart',
@@ -751,8 +752,8 @@ const TRANS = {
     title:'దక్షిణ భారతీయ వేద జ్యోతిష్య చార్ట్',
     subtitle:'ఇంటరాక్టివ్ • గ్రహాలను రాశులలో ఉంచండి',
     bankTitle:'గ్రహ బ్యాంక్ — చార్ట్‌లోకి లాగండి',
-    bankTip:'ఇక్కడి నుండి గ్రహాలను చార్ట్ బాక్స్‌లోకి లాగండి. ఉంచిన గ్రహంపై రెండుసార్లు నొక్కండి.',
-    degHint:'వక్రి మార్చడానికి నొక్కండి · డిగ్రీ మార్చడానికి పైకి/క్రిందికి స్లైడ్ చేయండి',
+    bankTip:'గ్రహాన్ని రాశిలోకి లాగండి. వక్రి సెట్ చేయడానికి నొక్కండి. తిరిగి రావడానికి రెండుసార్లు నొక్కండి.',
+    degHint:'డిగ్రీ మార్చడానికి గ్రహాన్ని పైకి/క్రిందికి స్లైడ్ చేయండి',
     hideSigns:'రాశులను దాచు', showSigns:'రాశులను చూపు',
     hideNums:'నంబర్లను దాచు', showNums:'నంబర్లను చూపు',
     clearChart:'చార్ట్ క్లియర్',
@@ -776,20 +777,15 @@ let lang = 'en';
 let lagnaSign = null;
 let signsHidden = false;
 let numsHidden = false;
-let planetData = {}; // pid -> {sign, degree, retro}
+let planetData = {};       // pid -> {sign, degree, retro}
 let activePlanetForRetro = null;
-
-// Drag state (unified pointer events)
 let dragState = null;
-/*  dragState = {
-      pid, sourceEl, ghost, startX, startY,
-      isDegreeMode (false = moving between cells, true = adjusting degree),
-      initDeg
-    }
-*/
+let lastDragEndTime = 0;   // FIX #4: suppress click after drag
 
 /* ─── Helpers ─────────────────────────────────── */
 const T = () => TRANS[lang];
+function getEl(sel) { return document.querySelector(sel); }
+function getAll(sel) { return document.querySelectorAll(sel); }
 
 function houseNum(sign) {
   if (!lagnaSign) return null;
@@ -810,10 +806,7 @@ function getNakshatra(sign, deg) {
   return {...NAKSH[ni], pada};
 }
 
-function getEl(sel) { return document.querySelector(sel); }
-function getAll(sel) { return document.querySelectorAll(sel); }
-
-/* ─── Build Planet Element ───────────────────── */
+/* ─── Build / Refresh Planet Element ─────────── */
 function buildPlanet(pid) {
   const el = document.createElement('span');
   el.className = `planet ${pid}`;
@@ -826,8 +819,8 @@ function refreshPlanetContent(el) {
   const pid = el.dataset.pid;
   const t = T();
   const sym = t.psym[pid] || pid.slice(0,2);
-  let html = sym;
   const d = planetData[pid];
+  let html = sym;
   if (d) {
     html += `<span class="deg-label">${d.degree.toFixed(1)}°</span>`;
     if (d.retro) html += `<span class="retro-mark">R</span>`;
@@ -837,6 +830,22 @@ function refreshPlanetContent(el) {
 
 function refreshAllPlanets() {
   document.querySelectorAll('.planet').forEach(el => refreshPlanetContent(el));
+}
+
+/* ─── Bank: rebuild from scratch respecting language ── */
+function rebuildBank() {
+  const bank = getEl('#planetBank');
+  // Only add planets not already in the chart
+  const inChart = new Set(
+    [...document.querySelectorAll('.planets-area .planet')].map(el => el.dataset.pid)
+  );
+  // Remove all current bank planets first
+  [...bank.querySelectorAll('.planet')].forEach(el => el.remove());
+  ALL_PIDS.forEach(pid => {
+    if (!inChart.has(pid)) {
+      bank.appendChild(buildPlanet(pid));
+    }
+  });
 }
 
 /* ─── House Numbers ──────────────────────────── */
@@ -861,21 +870,22 @@ function updateSignLabels() {
 /* ─── Language UI ─────────────────────────────── */
 function applyLang() {
   const t = T();
-  getEl('#appTitle').textContent = t.title;
+  getEl('#appTitle').textContent    = t.title;
   getEl('#appSubtitle').textContent = t.subtitle;
-  getEl('#bankTitle').textContent = t.bankTitle;
-  getEl('#bankTip').textContent = t.bankTip;
-  getEl('#degHint').textContent = t.degHint;
+  getEl('#bankTitle').textContent   = t.bankTitle;
+  getEl('#bankTip').textContent     = t.bankTip;
+  getEl('#degHint').textContent     = t.degHint;
   getEl('#centerLine1').textContent = t.center1;
   getEl('#centerLine2').textContent = t.center2;
-  getEl('#retroLabel').textContent = t.retroLabel;
-  getEl('#retroClose').textContent = t.close;
-  getEl('#spClose').textContent = t.close;
-  getEl('#btnSigns').textContent = signsHidden ? t.showSigns : t.hideSigns;
-  getEl('#btnNums').textContent = numsHidden ? t.showNums : t.hideNums;
-  getEl('#btnClear').textContent = t.clearChart;
+  getEl('#retroLabel').textContent  = t.retroLabel;
+  getEl('#retroClose').textContent  = t.close;
+  getEl('#spClose').textContent     = t.close;
+  getEl('#btnSigns').textContent    = signsHidden ? t.showSigns : t.hideSigns;
+  getEl('#btnNums').textContent     = numsHidden  ? t.showNums  : t.hideNums;
+  getEl('#btnClear').textContent    = t.clearChart;
   updateSignLabels();
   updateHouseNums();
+  // FIX #11: always refresh all planets (includes bank) on language change
   refreshAllPlanets();
 }
 
@@ -908,19 +918,22 @@ function showTooltip(pid, x, y) {
 
   tooltip.innerHTML = html;
   tooltip.classList.add('visible');
-  positionElement(tooltip, x, y);
+  positionFloating(tooltip, x, y);
 }
 
 function hideTooltip() { tooltip.classList.remove('visible'); }
 
-function positionElement(el, x, y) {
-  el.style.left = '0px'; el.style.top = '0px';
-  const w = el.offsetWidth, h = el.offsetHeight;
-  const vw = window.innerWidth, vh = window.innerHeight;
-  let lx = x + 12, ly = y - h - 8;
-  if (lx + w > vw - 8) lx = x - w - 12;
+/* FIX #8: show panel FIRST, then position so offsetWidth/Height are real */
+function positionFloating(el, x, y) {
+  // Already visible before this call — measure real dims
+  const w  = el.offsetWidth  || 200;
+  const h  = el.offsetHeight || 100;
+  const vw = window.innerWidth;
+  const vh = window.innerHeight;
+  let lx = x + 14, ly = y - h - 10;
+  if (lx + w > vw - 8) lx = x - w - 14;
   if (lx < 8) lx = 8;
-  if (ly < 8) ly = y + 20;
+  if (ly < 8) ly = y + 24;
   if (ly + h > vh - 8) ly = vh - h - 8;
   el.style.left = lx + 'px';
   el.style.top  = ly + 'px';
@@ -930,6 +943,7 @@ function positionElement(el, x, y) {
 const signPanel = getEl('#signPanel');
 
 function showSignPanel(sign, x, y) {
+  hideAllPanels(); // FIX #7: always close other panels first
   const t = T();
   const sd = SIGN_DATA[sign];
   const hn = houseNum(sign);
@@ -947,28 +961,29 @@ function showSignPanel(sign, x, y) {
     body += `<div><strong>${t.ruler}:</strong> ${sd.ruler} &nbsp;|&nbsp; <strong>${t.element}:</strong> ${sd.el} &nbsp;|&nbsp; <strong>${t.modality}:</strong> ${sd.mod}</div>`;
   }
   getEl('#spBody').innerHTML = body;
+  // FIX #8: add visible class BEFORE positioning so offsetWidth is real
   signPanel.classList.add('visible');
   getEl('#overlay').classList.add('visible');
-  positionElement(signPanel, x, y);
+  positionFloating(signPanel, x, y);
 }
 
-function hideSignPanel() {
-  signPanel.classList.remove('visible');
-}
+function hideSignPanel() { signPanel.classList.remove('visible'); }
 
 /* ─── Retrograde Panel ────────────────────────── */
-const retroPanel  = getEl('#retroPanel');
-const retroCheck  = getEl('#retroCheck');
-const retroTitle  = getEl('#retroTitle');
+const retroPanel = getEl('#retroPanel');
+const retroCheck = getEl('#retroCheck');
+const retroTitle = getEl('#retroTitle');
 
 function showRetroPanel(pid, x, y) {
+  hideAllPanels(); // FIX #7: close other panels first
   activePlanetForRetro = pid;
   const t = T();
   retroTitle.textContent = t.pnames[pid] || pid;
-  retroCheck.checked = planetData[pid]?.retro || false;
+  retroCheck.checked = !!(planetData[pid]?.retro);
+  // FIX #8: add visible BEFORE positioning
   retroPanel.classList.add('visible');
   getEl('#overlay').classList.add('visible');
-  positionElement(retroPanel, x, y);
+  positionFloating(retroPanel, x, y);
 }
 
 function hideRetroPanel() {
@@ -994,27 +1009,29 @@ getEl('#retroClose').addEventListener('click', hideAllPanels);
 getEl('#spClose').addEventListener('click', hideAllPanels);
 getEl('#overlay').addEventListener('click', hideAllPanels);
 
-/* ─── Drop planet into a sign ─────────────────── */
+/* ─── Move planet into chart sign ─────────────── */
 function movePlanetToSign(pid, targetSign) {
-  // Remove from wherever it is
+  // FIX #5: short-circuit if already in same sign (no needless rebuild)
+  if (planetData[pid] && planetData[pid].sign === targetSign) return;
+
+  // Remove existing element from wherever it is (chart or bank)
   const existing = document.querySelector(`.planet[data-pid="${pid}"]`);
   if (existing) existing.remove();
 
-  // If Lagna is already placed somewhere, handle
-  if (pid === 'Lagna') {
-    lagnaSign = targetSign;
-  }
+  if (pid === 'Lagna') lagnaSign = targetSign;
 
   const area = document.querySelector(`.planets-area[data-sign="${targetSign}"]`);
   if (!area) return;
 
   if (!planetData[pid]) {
+    // Brand new placement — assign random degree
     planetData[pid] = {
       sign: targetSign,
       degree: parseFloat((Math.random() * 30).toFixed(2)),
       retro: false
     };
   } else {
+    // Moving between signs — preserve degree and retro
     planetData[pid].sign = targetSign;
   }
 
@@ -1023,99 +1040,95 @@ function movePlanetToSign(pid, targetSign) {
   updateHouseNums();
 }
 
+/* ─── Return planet to bank ───────────────────── */
 function returnPlanetToBank(pid) {
   const existing = document.querySelector(`.planets-area .planet[data-pid="${pid}"]`);
-  if (!existing) return;
+  if (!existing) return; // not in chart, nothing to do
   existing.remove();
   delete planetData[pid];
-
   if (pid === 'Lagna') { lagnaSign = null; updateHouseNums(); }
-
+  // Append to bank in original order
+  const bank = getEl('#planetBank');
   const el = buildPlanet(pid);
-  getEl('#planetBank').appendChild(el);
+  // Insert at correct position relative to other bank planets
+  const after = ALL_PIDS.slice(ALL_PIDS.indexOf(pid) + 1)
+    .map(id => bank.querySelector(`.planet[data-pid="${id}"]`))
+    .find(Boolean);
+  if (after) bank.insertBefore(el, after);
+  else bank.appendChild(el);
 }
 
-/* ═══════════════════════════════════════════════
-   UNIFIED POINTER EVENT DRAG-AND-DROP SYSTEM
-   Works identically on mouse and touch (Android)
-   ════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════
+   UNIFIED POINTER EVENT DRAG & DROP
+   FIX #2: NO setPointerCapture (breaks elementsFromPoint on Android)
+   FIX #1: initDeg locked when direction is first decided, not at pointerdown
+   FIX #3: ghost sized via RAF before first position
+   FIX #4: drag flag suppresses click double-tap counter
+   FIX #10: source element is pointer-events:none while dragging
+   FIX #13: guard against multiple pointers overwriting dragState
+   ═══════════════════════════════════════════════════ */
 
 const ghost = getEl('#drag-ghost');
-let LONG_PRESS_TIMER = null;
-let TOUCH_MOVED = false;
-const LONG_PRESS_MS = 300;
 
-// We use pointer events for unified mouse+touch
-document.addEventListener('pointerdown', onPointerDown, {passive:false});
-document.addEventListener('pointermove', onPointerMove, {passive:false});
-document.addEventListener('pointerup',   onPointerUp);
+document.addEventListener('pointerdown', onPointerDown, {passive: false});
+document.addEventListener('pointermove', onPointerMove, {passive: false});
+document.addEventListener('pointerup',   onPointerUp,   {passive: false});
 document.addEventListener('pointercancel', onPointerCancel);
 
 function onPointerDown(e) {
+  // FIX #13: ignore extra pointers if a drag is already in progress
+  if (dragState) return;
+
   const planetEl = e.target.closest('.planet');
   if (!planetEl) return;
   e.preventDefault();
 
-  const pid = planetEl.dataset.pid;
-  const inChart = planetEl.closest('.planets-area') !== null;
-  const inBank  = planetEl.closest('#planetBank') !== null;
+  const pid     = planetEl.dataset.pid;
+  const inChart = !!planetEl.closest('.planets-area');
+  const inBank  = !!planetEl.closest('#planetBank');
 
-  TOUCH_MOVED = false;
+  if (!inChart && !inBank) return;
 
-  if (inChart) {
-    // Could be: drag to move OR vertical slide to change degree
-    // We'll decide on first move direction
-    dragState = {
-      pid,
-      sourceEl: planetEl,
-      startX: e.clientX,
-      startY: e.clientY,
-      isDegreeMode: false,      // will decide on first move
-      directionLocked: false,
-      initDeg: planetData[pid]?.degree ?? 0,
-      inChart: true
-    };
-  } else if (inBank) {
-    dragState = {
-      pid,
-      sourceEl: planetEl,
-      startX: e.clientX,
-      startY: e.clientY,
-      isDegreeMode: false,
-      directionLocked: true,
-      initDeg: 0,
-      inChart: false
-    };
-  }
-
-  if (dragState) {
-    try { planetEl.setPointerCapture(e.pointerId); } catch(_) {}
-  }
+  dragState = {
+    pid,
+    pointerId: e.pointerId,
+    sourceEl: planetEl,
+    startX: e.clientX,
+    startY: e.clientY,
+    moved: false,
+    isDegreeMode: false,
+    directionLocked: false,
+    initDeg: 0,        // FIX #1: set when direction is locked, not here
+    inChart,
+    ghostShown: false
+  };
+  // FIX #2: Do NOT call setPointerCapture — we need elementsFromPoint to work
 }
 
 function onPointerMove(e) {
-  if (!dragState) return;
+  if (!dragState || e.pointerId !== dragState.pointerId) return;
   e.preventDefault();
 
-  const dx = e.clientX - dragState.startX;
-  const dy = e.clientY - dragState.startY;
-  const dist = Math.sqrt(dx*dx + dy*dy);
+  const dx   = e.clientX - dragState.startX;
+  const dy   = e.clientY - dragState.startY;
+  const dist = Math.hypot(dx, dy);
 
-  if (dist < 4) return; // dead zone
-  TOUCH_MOVED = true;
+  if (dist < 5) return; // dead zone
+  dragState.moved = true;
 
-  // Lock direction for chart planets
+  // ── Direction lock (chart planets only) ──────────
   if (dragState.inChart && !dragState.directionLocked) {
-    dragState.isDegreeMode = Math.abs(dy) > Math.abs(dx);
+    dragState.isDegreeMode    = Math.abs(dy) > Math.abs(dx);
     dragState.directionLocked = true;
+    // FIX #1: capture current degree NOW as the baseline
+    dragState.initDeg = planetData[dragState.pid]?.degree ?? 0;
   }
 
+  // ── Degree adjustment (vertical slide) ───────────
   if (dragState.isDegreeMode) {
-    // Vertical slide = degree change
-    const delta = -dy / 25; // px per degree
-    let newDeg = dragState.initDeg + delta;
-    newDeg = Math.max(0, Math.min(29.99, newDeg));
-    newDeg = parseFloat(newDeg.toFixed(2));
+    const delta  = (dragState.startY - e.clientY) / 22;
+    let newDeg   = dragState.initDeg + delta;
+    newDeg       = Math.max(0, Math.min(29.99, parseFloat(newDeg.toFixed(2))));
     if (planetData[dragState.pid]) {
       planetData[dragState.pid].degree = newDeg;
       refreshPlanetContent(dragState.sourceEl);
@@ -1124,37 +1137,55 @@ function onPointerMove(e) {
     return;
   }
 
-  // Horizontal/diagonal = drag-to-move
-  // Show ghost, hide source
-  if (ghost.style.display !== 'block') {
+  // ── Drag-to-move ─────────────────────────────────
+  if (!dragState.ghostShown) {
+    dragState.ghostShown = true;
     dragState.sourceEl.classList.add('dragging');
-    ghost.innerHTML = dragState.sourceEl.outerHTML;
-    ghost.querySelector('.planet').style.transform = 'none';
+    // FIX #10: hide source from hit-testing while dragging
+    dragState.sourceEl.style.pointerEvents = 'none';
+    hideAllPanels();
+
+    // Build ghost
+    const inner = dragState.sourceEl.cloneNode(true);
+    inner.style.transform = 'none';
+    inner.style.pointerEvents = 'none';
+    ghost.innerHTML = '';
+    ghost.appendChild(inner);
     ghost.style.display = 'block';
-    hideTooltip();
+
+    // FIX #3: position after RAF so browser has laid out ghost dimensions
+    requestAnimationFrame(() => {
+      const w = ghost.offsetWidth  || 50;
+      const h = ghost.offsetHeight || 26;
+      ghost.style.left = (e.clientX - w / 2) + 'px';
+      ghost.style.top  = (e.clientY - h / 2) + 'px';
+    });
+    return;
   }
 
-  ghost.style.left = (e.clientX - ghost.offsetWidth  / 2) + 'px';
-  ghost.style.top  = (e.clientY - ghost.offsetHeight / 2) + 'px';
+  // Update ghost position
+  const w = ghost.offsetWidth  || 50;
+  const h = ghost.offsetHeight || 26;
+  ghost.style.left = (e.clientX - w / 2) + 'px';
+  ghost.style.top  = (e.clientY - h / 2) + 'px';
 
-  // Highlight drop zone
-  getAll('.cell.drop-active, #planetBank.drop-active').forEach(el => el.classList.remove('drop-active'));
+  // Highlight drop zone under finger
+  getAll('.cell.drop-active, .planet-bank.drop-active')
+    .forEach(el => el.classList.remove('drop-active'));
   const under = getDropTarget(e.clientX, e.clientY);
   if (under) under.classList.add('drop-active');
 }
 
 function onPointerUp(e) {
-  if (!dragState) return;
+  if (!dragState || e.pointerId !== dragState.pointerId) return;
+  e.preventDefault();
 
-  ghost.style.display = 'none';
-  getAll('.cell.drop-active, #planetBank.drop-active').forEach(el => el.classList.remove('drop-active'));
-  dragState.sourceEl.classList.remove('dragging');
-  hideTooltip();
+  cleanupDrag();
 
   const pid = dragState.pid;
 
-  if (!TOUCH_MOVED) {
-    // Tap (no movement) on a chart planet → show retro panel
+  // ── Tap (no movement) ────────────────────────────
+  if (!dragState.moved) {
     if (dragState.inChart && planetData[pid]) {
       showRetroPanel(pid, e.clientX, e.clientY);
     }
@@ -1162,15 +1193,17 @@ function onPointerUp(e) {
     return;
   }
 
+  // ── Degree adjustment finished ────────────────────
   if (dragState.isDegreeMode) {
-    // Degree was already updated live; just clean up
     dragState = null;
     return;
   }
 
-  // Drop
-  const under = getDropTarget(e.clientX, e.clientY);
+  // ── Drop ──────────────────────────────────────────
+  // FIX #4: mark that we just finished a drag so click handler ignores it
+  lastDragEndTime = Date.now();
 
+  const under = getDropTarget(e.clientX, e.clientY);
   if (under) {
     if (under.id === 'planetBank') {
       returnPlanetToBank(pid);
@@ -1182,23 +1215,31 @@ function onPointerUp(e) {
   dragState = null;
 }
 
-function onPointerCancel() {
-  if (!dragState) return;
-  ghost.style.display = 'none';
-  getAll('.cell.drop-active, #planetBank.drop-active').forEach(el => el.classList.remove('drop-active'));
-  if (dragState.sourceEl) dragState.sourceEl.classList.remove('dragging');
+function onPointerCancel(e) {
+  if (!dragState || e.pointerId !== dragState.pointerId) return;
+  cleanupDrag();
   dragState = null;
   hideTooltip();
 }
 
-/* Find the chart cell or bank under a point, ignoring ghost & dragged planet */
-function getDropTarget(x, y) {
-  ghost.style.pointerEvents = 'none';
-  const els = document.elementsFromPoint(x, y);
-  ghost.style.pointerEvents = '';
+function cleanupDrag() {
+  ghost.style.display = 'none';
+  ghost.innerHTML     = '';
+  getAll('.cell.drop-active, .planet-bank.drop-active')
+    .forEach(el => el.classList.remove('drop-active'));
+  if (dragState?.sourceEl) {
+    dragState.sourceEl.classList.remove('dragging');
+    // FIX #10: restore pointer events on source
+    dragState.sourceEl.style.pointerEvents = '';
+  }
+  hideTooltip();
+}
 
+/* FIX #2: no setPointerCapture → elementsFromPoint works correctly on Android */
+function getDropTarget(x, y) {
+  // Ghost already has pointer-events:none via CSS, source has it none via style
+  const els = document.elementsFromPoint(x, y);
   for (const el of els) {
-    if (el === ghost) continue;
     const cell = el.closest('.cell[data-sign]');
     if (cell) return cell;
     if (el.id === 'planetBank' || el.closest('#planetBank')) return getEl('#planetBank');
@@ -1206,17 +1247,22 @@ function getDropTarget(x, y) {
   return null;
 }
 
-/* ─── Double-tap / double-click to return to bank ── */
+/* ─── Double-tap to return planet to bank ─────────
+   FIX #4: skip if we just finished a drag (click fires after pointerup)   */
 let lastTap = {pid: null, time: 0};
 
 document.addEventListener('click', (e) => {
+  // FIX #4: ignore click that fires right after a drag ends
+  if (Date.now() - lastDragEndTime < 300) return;
+
   const planetEl = e.target.closest('.planet');
-  if (!planetEl) return;
-  if (!planetEl.closest('.planets-area')) return;
+  if (!planetEl || !planetEl.closest('.planets-area')) return;
 
   const pid = planetEl.dataset.pid;
   const now = Date.now();
+
   if (lastTap.pid === pid && now - lastTap.time < 400) {
+    // Genuine double-tap → return to bank
     returnPlanetToBank(pid);
     hideAllPanels();
     lastTap = {pid: null, time: 0};
@@ -1225,18 +1271,14 @@ document.addEventListener('click', (e) => {
   }
 });
 
-/* ─── Sign label tap/hover ───────────────────── */
-// Desktop hover
+/* ─── Sign label: tap/click to show info ─────── */
 getAll('.sign-abbr').forEach(el => {
-  el.addEventListener('mouseenter', (e) => {
-    if (!signsHidden) showSignPanel(el.dataset.sign, e.clientX, e.clientY);
+  el.addEventListener('mouseenter', (ev) => {
+    if (!signsHidden) showSignPanel(el.dataset.sign, ev.clientX, ev.clientY);
   });
-  el.addEventListener('mouseleave', () => {
-    // On desktop, keep panel open until click elsewhere
-  });
-  el.addEventListener('click', (e) => {
-    e.stopPropagation();
-    if (!signsHidden) showSignPanel(el.dataset.sign, e.clientX, e.clientY);
+  el.addEventListener('click', (ev) => {
+    ev.stopPropagation();
+    if (!signsHidden) showSignPanel(el.dataset.sign, ev.clientX, ev.clientY);
   });
 });
 
@@ -1254,47 +1296,42 @@ document.addEventListener('mousemove', (e) => {
 /* ─── Button controls ────────────────────────── */
 getEl('#btnSigns').addEventListener('click', () => {
   signsHidden = !signsHidden;
-  const t = T();
-  getEl('#btnSigns').textContent = signsHidden ? t.showSigns : t.hideSigns;
+  getEl('#btnSigns').textContent = signsHidden ? T().showSigns : T().hideSigns;
   updateSignLabels();
 });
 
 getEl('#btnNums').addEventListener('click', () => {
   numsHidden = !numsHidden;
-  const t = T();
-  getEl('#btnNums').textContent = numsHidden ? t.showNums : t.hideNums;
+  getEl('#btnNums').textContent = numsHidden ? T().showNums : T().hideNums;
   updateHouseNums();
 });
 
 getEl('#btnClear').addEventListener('click', () => {
-  // Remove all planets from chart
   getAll('.planets-area .planet').forEach(el => el.remove());
-  // Rebuild bank
-  const bank = getEl('#planetBank');
-  bank.innerHTML = '';
-  const pids = ['Lagna','Sun','Moon','Mars','Mercury','Jupiter','Venus','Saturn','Rahu','Ketu'];
-  pids.forEach(pid => {
-    const el = buildPlanet(pid);
-    bank.appendChild(el);
-  });
-  planetData = {};
-  lagnaSign = null;
-  signsHidden = false;
-  numsHidden = false;
+  planetData    = {};
+  lagnaSign     = null;
+  signsHidden   = false;
+  numsHidden    = false;
+  dragState     = null;
+  ghost.style.display = 'none';
+  rebuildBank();      // FIX #11: uses buildPlanet → respects current language
   applyLang();
   hideAllPanels();
 });
 
 getEl('#lang').addEventListener('change', (e) => {
   lang = e.target.value;
-  applyLang();
+  applyLang();        // refreshAllPlanets is called inside, updates bank symbols too
   hideAllPanels();
 });
 
-/* ─── Close panels on outside click ─────────── */
+/* ─── Close panels on outside tap/click ─────── */
 document.addEventListener('pointerdown', (e) => {
-  if (!retroPanel.classList.contains('visible') && !signPanel.classList.contains('visible')) return;
-  if (e.target.closest('#retroPanel') || e.target.closest('#signPanel') || e.target.closest('.sign-abbr')) return;
+  if (!retroPanel.classList.contains('visible') &&
+      !signPanel.classList.contains('visible')) return;
+  if (e.target.closest('#retroPanel') ||
+      e.target.closest('#signPanel')  ||
+      e.target.closest('.sign-abbr')) return;
   hideAllPanels();
 }, {capture: true});
 
