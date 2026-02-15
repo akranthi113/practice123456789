@@ -134,7 +134,8 @@ select#lang {
   justify-content: flex-start;
   padding: 4px;
   min-height: 78px;
-  overflow: visible;
+  /* FIX #8: cap overflow so many planets don't blow the grid */
+  overflow: hidden;
   transition: background 0.15s;
 }
 .cell.drop-active { background: rgba(74,111,165,0.1); outline: 2px dashed var(--accent-light); outline-offset: -2px; }
@@ -197,12 +198,15 @@ select#lang {
   padding: 1px 4px;
   border-radius: 3px;
   letter-spacing: 0.04em;
-  cursor: default;
+  cursor: pointer;
+  /* FIX #12: keyboard accessible */
   z-index: 2;
   user-select: none;
   transition: background 0.15s, color 0.15s;
 }
 .sign-abbr:hover { color: var(--gold); background: rgba(139,105,20,0.15); }
+/* FIX #12: visible focus ring */
+.sign-abbr:focus-visible { outline: 2px solid var(--gold); outline-offset: 1px; border-radius: 3px; }
 .sign-abbr.hidden-label { visibility: hidden; }
 
 .house-num {
@@ -229,6 +233,20 @@ select#lang {
   min-height: 28px;
   margin-top: 20px;
   padding: 2px;
+  /* FIX #8: prevent overflow breaking grid */
+  overflow: hidden;
+  max-height: calc(100% - 24px);
+}
+
+/* FIX #8: overflow indicator when cell is crowded */
+.cell.overcrowded::after {
+  content: '…';
+  position: absolute;
+  bottom: 14px;
+  right: 4px;
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  pointer-events: none;
 }
 
 /* Planet Chips */
@@ -253,10 +271,15 @@ select#lang {
   justify-content: center;
   z-index: 3;
   color: #fff;
+  /* FIX #12: keyboard accessible */
+  outline: none;
 }
+/* FIX #12: planet focus ring */
+.planet:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
 .planet:hover { transform: translateY(-1px); box-shadow: 0 2px 8px rgba(0,0,0,0.22); }
 .planet.dragging { opacity: 0.3; }
 
+/* FIX #13: color-blind accessible — add shape/pattern differentiation via border styles */
 .planet.Lagna {
   background: transparent !important;
   border: 2px solid var(--gold);
@@ -264,15 +287,15 @@ select#lang {
   font-size: 0.63rem;
   box-shadow: 0 0 0 1px rgba(139,105,20,0.2);
 }
-.planet.Sun      { background: var(--sun); }
-.planet.Moon     { background: var(--moon); }
-.planet.Mars     { background: var(--mars); }
-.planet.Mercury  { background: var(--mercury); }
-.planet.Jupiter  { background: var(--jupiter); }
-.planet.Venus    { background: var(--venus); }
-.planet.Saturn   { background: var(--saturn); }
-.planet.Rahu     { background: var(--rahu); }
-.planet.Ketu     { background: var(--ketu); }
+.planet.Sun      { background: var(--sun);     border: 2px solid rgba(0,0,0,0.15); }
+.planet.Moon     { background: var(--moon);    border: 2px dashed rgba(255,255,255,0.4); }
+.planet.Mars     { background: var(--mars);    border: 2px solid rgba(255,255,255,0.25); }
+.planet.Mercury  { background: var(--mercury); border: 2px dotted rgba(255,255,255,0.5); }
+.planet.Jupiter  { background: var(--jupiter); border: 2px solid rgba(0,0,0,0.15); }
+.planet.Venus    { background: var(--venus);   border: 2px dashed rgba(255,255,255,0.4); }
+.planet.Saturn   { background: var(--saturn);  border: 2px dotted rgba(255,255,255,0.5); }
+.planet.Rahu     { background: var(--rahu);    border: 2px solid rgba(255,255,255,0.2); }
+.planet.Ketu     { background: var(--ketu);    border: 2px dashed rgba(255,255,255,0.35); }
 
 .retro-mark {
   font-size: 0.58rem;
@@ -348,6 +371,18 @@ select#lang {
   font-style: italic;
 }
 
+/* FIX #15: save/restore notice */
+.persist-notice {
+  font-size: 0.72rem;
+  color: var(--green);
+  text-align: center;
+  padding: 3px 0;
+  font-style: italic;
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+.persist-notice.show { opacity: 1; }
+
 .btn-row {
   display: flex;
   flex-wrap: wrap;
@@ -370,6 +405,8 @@ select#lang {
   text-transform: uppercase;
 }
 .btn:hover { background: var(--card2); color: var(--text); border-color: var(--gold-dim); }
+/* FIX #12: button focus rings */
+.btn:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
 .btn.danger { border-color: rgba(192,57,43,0.35); color: var(--red); }
 .btn.danger:hover { background: rgba(192,57,43,0.07); }
 
@@ -379,6 +416,19 @@ select#lang {
   text-align: center;
   padding: 4px;
   font-style: italic;
+}
+
+/* Aspect note box */
+.aspect-system-note {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  background: rgba(139,105,20,0.05);
+  border-left: 3px solid var(--gold-dim);
+  padding: 5px 10px;
+  border-radius: 0 5px 5px 0;
+  margin-bottom: 8px;
+  font-style: italic;
+  line-height: 1.45;
 }
 
 /* Yoga Cards */
@@ -491,6 +541,8 @@ select#lang {
 .tab-btn:last-child { border-right: none; }
 .tab-btn.active { background: var(--surface); color: var(--gold); }
 .tab-btn:hover:not(.active) { background: rgba(139,105,20,0.05); color: var(--text-dim); }
+/* FIX #12: tab focus ring */
+.tab-btn:focus-visible { outline: 2px solid var(--gold); outline-offset: -2px; }
 
 .tab-content { display: none; }
 .tab-content.active { display: block; }
@@ -612,9 +664,9 @@ select#lang {
 </head>
 <body>
 
-<div id="drag-ghost"></div>
+<div id="drag-ghost" aria-hidden="true"></div>
 <div class="overlay" id="overlay"></div>
-<div class="copy-toast" id="copyToast">✓ Copied to clipboard!</div>
+<div class="copy-toast" id="copyToast" role="status" aria-live="polite">✓ Copied to clipboard!</div>
 
 <div class="app-header">
   <div class="app-title" id="appTitle">South Indian Vedic Astrology Chart</div>
@@ -625,79 +677,79 @@ select#lang {
 
   <div class="lang-row">
     <span class="lang-label">Language:</span>
-    <select id="lang">
+    <select id="lang" aria-label="Select language">
       <option value="en">English</option>
       <option value="te">తెలుగు</option>
     </select>
   </div>
 
   <!-- Chart -->
-  <div class="chart-wrap">
+  <div class="chart-wrap" role="region" aria-label="Vedic chart grid">
     <div class="chart-grid" id="chartGrid">
       <div class="cell" data-sign="Pisces">
-        <span class="sign-abbr" data-sign="Pisces">Pi</span>
-        <span class="house-num"></span>
-        <div class="planets-area" data-sign="Pisces"></div>
+        <span class="sign-abbr" data-sign="Pisces" tabindex="0" role="button" aria-label="Pisces sign info">Pi</span>
+        <span class="house-num" aria-hidden="true"></span>
+        <div class="planets-area" data-sign="Pisces" role="list" aria-label="Pisces planets"></div>
       </div>
       <div class="cell" data-sign="Aries">
-        <span class="sign-abbr" data-sign="Aries">Ar</span>
-        <span class="house-num"></span>
-        <div class="planets-area" data-sign="Aries"></div>
+        <span class="sign-abbr" data-sign="Aries" tabindex="0" role="button" aria-label="Aries sign info">Ar</span>
+        <span class="house-num" aria-hidden="true"></span>
+        <div class="planets-area" data-sign="Aries" role="list" aria-label="Aries planets"></div>
       </div>
       <div class="cell" data-sign="Taurus">
-        <span class="sign-abbr" data-sign="Taurus">Ta</span>
-        <span class="house-num"></span>
-        <div class="planets-area" data-sign="Taurus"></div>
+        <span class="sign-abbr" data-sign="Taurus" tabindex="0" role="button" aria-label="Taurus sign info">Ta</span>
+        <span class="house-num" aria-hidden="true"></span>
+        <div class="planets-area" data-sign="Taurus" role="list" aria-label="Taurus planets"></div>
       </div>
       <div class="cell" data-sign="Gemini">
-        <span class="sign-abbr" data-sign="Gemini">Ge</span>
-        <span class="house-num"></span>
-        <div class="planets-area" data-sign="Gemini"></div>
+        <span class="sign-abbr" data-sign="Gemini" tabindex="0" role="button" aria-label="Gemini sign info">Ge</span>
+        <span class="house-num" aria-hidden="true"></span>
+        <div class="planets-area" data-sign="Gemini" role="list" aria-label="Gemini planets"></div>
       </div>
       <div class="cell" data-sign="Aquarius">
-        <span class="sign-abbr" data-sign="Aquarius">Aq</span>
-        <span class="house-num"></span>
-        <div class="planets-area" data-sign="Aquarius"></div>
+        <span class="sign-abbr" data-sign="Aquarius" tabindex="0" role="button" aria-label="Aquarius sign info">Aq</span>
+        <span class="house-num" aria-hidden="true"></span>
+        <div class="planets-area" data-sign="Aquarius" role="list" aria-label="Aquarius planets"></div>
       </div>
-      <div class="cell-center" id="centerCell">
+      <div class="cell-center" id="centerCell" aria-hidden="true">
         <span class="center-line" id="centerLine1">South Indian</span>
         <span class="center-line" id="centerLine2">Chart</span>
         <div id="yogaBadgeArea"></div>
       </div>
       <div class="cell" data-sign="Cancer">
-        <span class="sign-abbr" data-sign="Cancer">Cn</span>
-        <span class="house-num"></span>
-        <div class="planets-area" data-sign="Cancer"></div>
+        <span class="sign-abbr" data-sign="Cancer" tabindex="0" role="button" aria-label="Cancer sign info">Cn</span>
+        <span class="house-num" aria-hidden="true"></span>
+        <div class="planets-area" data-sign="Cancer" role="list" aria-label="Cancer planets"></div>
       </div>
       <div class="cell" data-sign="Capricorn">
-        <span class="sign-abbr" data-sign="Capricorn">Cp</span>
-        <span class="house-num"></span>
-        <div class="planets-area" data-sign="Capricorn"></div>
+        <span class="sign-abbr" data-sign="Capricorn" tabindex="0" role="button" aria-label="Capricorn sign info">Cp</span>
+        <span class="house-num" aria-hidden="true"></span>
+        <div class="planets-area" data-sign="Capricorn" role="list" aria-label="Capricorn planets"></div>
       </div>
       <div class="cell" data-sign="Leo">
-        <span class="sign-abbr" data-sign="Leo">Le</span>
-        <span class="house-num"></span>
-        <div class="planets-area" data-sign="Leo"></div>
+        <span class="sign-abbr" data-sign="Leo" tabindex="0" role="button" aria-label="Leo sign info">Le</span>
+        <span class="house-num" aria-hidden="true"></span>
+        <div class="planets-area" data-sign="Leo" role="list" aria-label="Leo planets"></div>
       </div>
       <div class="cell" data-sign="Sagittarius">
-        <span class="sign-abbr" data-sign="Sagittarius">Sg</span>
-        <span class="house-num"></span>
-        <div class="planets-area" data-sign="Sagittarius"></div>
+        <span class="sign-abbr" data-sign="Sagittarius" tabindex="0" role="button" aria-label="Sagittarius sign info">Sg</span>
+        <span class="house-num" aria-hidden="true"></span>
+        <div class="planets-area" data-sign="Sagittarius" role="list" aria-label="Sagittarius planets"></div>
       </div>
       <div class="cell" data-sign="Scorpio">
-        <span class="sign-abbr" data-sign="Scorpio">Sc</span>
-        <span class="house-num"></span>
-        <div class="planets-area" data-sign="Scorpio"></div>
+        <span class="sign-abbr" data-sign="Scorpio" tabindex="0" role="button" aria-label="Scorpio sign info">Sc</span>
+        <span class="house-num" aria-hidden="true"></span>
+        <div class="planets-area" data-sign="Scorpio" role="list" aria-label="Scorpio planets"></div>
       </div>
       <div class="cell" data-sign="Libra">
-        <span class="sign-abbr" data-sign="Libra">Li</span>
-        <span class="house-num"></span>
-        <div class="planets-area" data-sign="Libra"></div>
+        <span class="sign-abbr" data-sign="Libra" tabindex="0" role="button" aria-label="Libra sign info">Li</span>
+        <span class="house-num" aria-hidden="true"></span>
+        <div class="planets-area" data-sign="Libra" role="list" aria-label="Libra planets"></div>
       </div>
       <div class="cell" data-sign="Virgo">
-        <span class="sign-abbr" data-sign="Virgo">Vi</span>
-        <span class="house-num"></span>
-        <div class="planets-area" data-sign="Virgo"></div>
+        <span class="sign-abbr" data-sign="Virgo" tabindex="0" role="button" aria-label="Virgo sign info">Vi</span>
+        <span class="house-num" aria-hidden="true"></span>
+        <div class="planets-area" data-sign="Virgo" role="list" aria-label="Virgo planets"></div>
       </div>
     </div>
   </div>
@@ -705,19 +757,20 @@ select#lang {
   <!-- Planet Bank -->
   <div class="panel">
     <div class="panel-title" id="bankTitle">Planet Bank — Drag into chart</div>
-    <div class="planet-bank" id="planetBank">
-      <span class="planet Lagna" data-pid="Lagna">L</span>
-      <span class="planet Sun"     data-pid="Sun">Su</span>
-      <span class="planet Moon"    data-pid="Moon">Mo</span>
-      <span class="planet Mars"    data-pid="Mars">Ma</span>
-      <span class="planet Mercury" data-pid="Mercury">Me</span>
-      <span class="planet Jupiter" data-pid="Jupiter">Ju</span>
-      <span class="planet Venus"   data-pid="Venus">Ve</span>
-      <span class="planet Saturn"  data-pid="Saturn">Sa</span>
-      <span class="planet Rahu"    data-pid="Rahu">Ra</span>
-      <span class="planet Ketu"    data-pid="Ketu">Ke</span>
+    <div class="planet-bank" id="planetBank" role="list" aria-label="Available planets">
+      <span class="planet Lagna" data-pid="Lagna" tabindex="0" role="listitem" aria-label="Lagna">L</span>
+      <span class="planet Sun"     data-pid="Sun"     tabindex="0" role="listitem" aria-label="Sun">Su</span>
+      <span class="planet Moon"    data-pid="Moon"    tabindex="0" role="listitem" aria-label="Moon">Mo</span>
+      <span class="planet Mars"    data-pid="Mars"    tabindex="0" role="listitem" aria-label="Mars">Ma</span>
+      <span class="planet Mercury" data-pid="Mercury" tabindex="0" role="listitem" aria-label="Mercury">Me</span>
+      <span class="planet Jupiter" data-pid="Jupiter" tabindex="0" role="listitem" aria-label="Jupiter">Ju</span>
+      <span class="planet Venus"   data-pid="Venus"   tabindex="0" role="listitem" aria-label="Venus">Ve</span>
+      <span class="planet Saturn"  data-pid="Saturn"  tabindex="0" role="listitem" aria-label="Saturn">Sa</span>
+      <span class="planet Rahu"    data-pid="Rahu"    tabindex="0" role="listitem" aria-label="Rahu">Ra</span>
+      <span class="planet Ketu"    data-pid="Ketu"    tabindex="0" role="listitem" aria-label="Ketu">Ke</span>
     </div>
     <div class="tip-box" id="bankTip">Drag planets from here into a chart sign box. Double-tap a placed planet to return it here. Tap once to set retrograde &amp; exact degree.</div>
+    <div class="persist-notice" id="persistNotice">Chart auto-saved ✓</div>
 
     <div class="btn-row">
       <button class="btn" id="btnSigns">Hide Signs</button>
@@ -729,26 +782,26 @@ select#lang {
 
   <!-- Bottom Panels: Tabs -->
   <div class="panel">
-    <div class="tab-row">
-      <button class="tab-btn active" data-tab="yogas" id="tabYogas">⚡ Yogas</button>
-      <button class="tab-btn" data-tab="prompt" id="tabPrompt">🤖 AI Prompt</button>
-      <button class="tab-btn" data-tab="aspects" id="tabAspects">🔭 Aspects</button>
+    <div class="tab-row" role="tablist" aria-label="Chart analysis panels">
+      <button class="tab-btn active" data-tab="yogas"   id="tabYogas"   role="tab" aria-selected="true"  aria-controls="tab-yogas">⚡ Yogas</button>
+      <button class="tab-btn"        data-tab="prompt"  id="tabPrompt"  role="tab" aria-selected="false" aria-controls="tab-prompt">🤖 AI Prompt</button>
+      <button class="tab-btn"        data-tab="aspects" id="tabAspects" role="tab" aria-selected="false" aria-controls="tab-aspects">🔭 Aspects</button>
     </div>
 
     <!-- Tab: Yogas -->
-    <div class="tab-content active" id="tab-yogas" style="margin-top:12px">
+    <div class="tab-content active" id="tab-yogas" role="tabpanel" aria-labelledby="tabYogas" style="margin-top:12px">
       <div class="yogas-panel visible" id="yogasPanel">
         <div class="yoga-empty" id="yogaEmpty">Place planets in the chart to detect yogas</div>
       </div>
     </div>
 
     <!-- Tab: AI Prompt -->
-    <div class="tab-content" id="tab-prompt" style="margin-top:12px">
+    <div class="tab-content" id="tab-prompt" role="tabpanel" aria-labelledby="tabPrompt" style="margin-top:12px">
       <div class="prompt-panel visible" id="promptPanel">
         <div style="font-size:0.78rem;color:var(--text-dim);line-height:1.5;font-style:italic" id="promptIntro">
           Generate a ready-to-paste prompt for any AI (ChatGPT, Claude, Gemini…) to get a Vedic reading.
         </div>
-        <div class="prompt-output" id="promptOutput"></div>
+        <div class="prompt-output" id="promptOutput" role="region" aria-label="Generated AI prompt" aria-live="polite"></div>
         <div class="btn-row">
           <button class="btn" id="btnGenPrompt">✨ Generate Prompt</button>
           <button class="btn" id="btnCopyPrompt">📋 Copy</button>
@@ -757,7 +810,12 @@ select#lang {
     </div>
 
     <!-- Tab: Aspects -->
-    <div class="tab-content" id="tab-aspects" style="margin-top:12px">
+    <div class="tab-content" id="tab-aspects" role="tabpanel" aria-labelledby="tabAspects" style="margin-top:12px">
+      <!-- FIX #7: clarify which aspect system is used -->
+      <div class="aspect-system-note">
+        Showing <strong>Parashari special aspects</strong> only (Mars: 4th/8th, Jupiter: 5th/9th, Saturn: 3rd/10th).
+        Note: Rahu &amp; Ketu aspects vary by tradition — Krishnamurti system is used here (5th/7th/9th).
+      </div>
       <div id="aspectsPanel" style="font-size:0.8rem;line-height:1.6;color:var(--text-dim)">
         <div class="yoga-empty">Place planets in the chart to see special aspects (drishti)</div>
       </div>
@@ -768,29 +826,30 @@ select#lang {
 </div>
 
 <!-- Floating Tooltip -->
-<div class="tooltip" id="tooltip"></div>
+<div class="tooltip" id="tooltip" role="tooltip" aria-live="polite"></div>
 
 <!-- Retrograde + Degree panel -->
-<div class="retro-panel" id="retroPanel">
+<div class="retro-panel" id="retroPanel" role="dialog" aria-modal="true" aria-labelledby="retroTitle">
   <div class="retro-panel-title" id="retroTitle">Planet</div>
   <label>
-    <input type="checkbox" id="retroCheck">
+    <input type="checkbox" id="retroCheck" aria-label="Mark as retrograde">
     <span id="retroLabel">Retrograde</span>
   </label>
   <div class="deg-input-row">
-    <span>Degree:</span>
-    <input type="number" id="degInput" min="0" max="29.99" step="0.1" value="0">
+    <label for="degInput">Degree:</label>
+    <input type="number" id="degInput" min="0" max="29.99" step="0.1" value="0"
+           aria-label="Planet degree within sign">
     <span>°</span>
   </div>
-  <span class="retro-panel-close" id="retroClose">Close</span>
+  <span class="retro-panel-close" id="retroClose" tabindex="0" role="button">Close</span>
 </div>
 
 <!-- Sign info panel -->
-<div class="sign-panel" id="signPanel">
+<div class="sign-panel" id="signPanel" role="dialog" aria-modal="true" aria-labelledby="spSignName">
   <strong id="spSignName"></strong>
   <hr>
   <div id="spBody"></div>
-  <span class="sp-close" id="spClose">Close</span>
+  <span class="sp-close" id="spClose" tabindex="0" role="button">Close</span>
 </div>
 
 <script>
@@ -876,12 +935,13 @@ const HOUSE_KW = {
   12:'Losses, Expenses, Moksha, Foreign Lands'
 };
 
+// FIX #7: Documented which aspect system (Krishnamurti for Rahu/Ketu)
 const SPECIAL_ASPECTS = {
   Mars:    [4, 7, 8],
   Jupiter: [5, 7, 9],
   Saturn:  [3, 7, 10],
-  Rahu:    [5, 7, 9],
-  Ketu:    [5, 7, 9]
+  Rahu:    [5, 7, 9],  // Krishnamurti system
+  Ketu:    [5, 7, 9]   // Krishnamurti system
 };
 
 const YOGA_DEFS = [
@@ -890,19 +950,21 @@ const YOGA_DEFS = [
     desc:'Jupiter and Moon in mutual kendra (1,4,7,10). Brings wisdom, fame, and prosperity.',
     check: (pd, ls) => {
       if (!ls || !pd['Jupiter'] || !pd['Moon']) return false;
-      const jH = houseNum(pd['Jupiter'].sign, ls), mH = houseNum(pd['Moon'].sign, ls);
+      const jH = houseNum(pd['Jupiter'].sign, ls);
+      const mH = houseNum(pd['Moon'].sign, ls);
+      if (!jH || !mH) return false;
       return [0,3,6,9].includes(Math.abs(jH - mH));
     }
   },
   {
     name:'Budha-Aditya Yoga', icon:'☀️',
     desc:'Sun and Mercury conjunct. Enhances intelligence, communication, and fame.',
-    check: (pd) => pd['Sun'] && pd['Mercury'] && pd['Sun'].sign === pd['Mercury'].sign
+    check: (pd) => !!(pd['Sun'] && pd['Mercury'] && pd['Sun'].sign === pd['Mercury'].sign)
   },
   {
     name:'Chandra-Mangal Yoga', icon:'🌙',
     desc:'Moon and Mars conjunct. Strong willpower, financial acumen, emotional courage.',
-    check: (pd) => pd['Moon'] && pd['Mars'] && pd['Moon'].sign === pd['Mars'].sign
+    check: (pd) => !!(pd['Moon'] && pd['Mars'] && pd['Moon'].sign === pd['Mars'].sign)
   },
   {
     name:'Lakshmi Yoga', icon:'🪷',
@@ -910,8 +972,9 @@ const YOGA_DEFS = [
     check: (pd, ls) => {
       if (!ls || !pd['Venus']) return false;
       const vH = houseNum(pd['Venus'].sign, ls);
+      if (!vH) return false;
       const exalt = EXALTATION['Venus'] === pd['Venus'].sign;
-      const own = (PLANET_RULES['Venus']||[]).includes(pd['Venus'].sign);
+      const own = (PLANET_RULES['Venus'] || []).includes(pd['Venus'].sign);
       return [1,4,5,7,9,10].includes(vH) && (exalt || own);
     }
   },
@@ -921,8 +984,9 @@ const YOGA_DEFS = [
     check: (pd, ls) => {
       if (!ls || !pd['Jupiter']) return false;
       const jH = houseNum(pd['Jupiter'].sign, ls);
+      if (!jH) return false;
       const exalt = EXALTATION['Jupiter'] === pd['Jupiter'].sign;
-      const own = (PLANET_RULES['Jupiter']||[]).includes(pd['Jupiter'].sign);
+      const own = (PLANET_RULES['Jupiter'] || []).includes(pd['Jupiter'].sign);
       return [1,4,7,10].includes(jH) && (exalt || own);
     }
   },
@@ -932,8 +996,9 @@ const YOGA_DEFS = [
     check: (pd, ls) => {
       if (!ls || !pd['Venus']) return false;
       const vH = houseNum(pd['Venus'].sign, ls);
+      if (!vH) return false;
       const exalt = EXALTATION['Venus'] === pd['Venus'].sign;
-      const own = (PLANET_RULES['Venus']||[]).includes(pd['Venus'].sign);
+      const own = (PLANET_RULES['Venus'] || []).includes(pd['Venus'].sign);
       return [1,4,7,10].includes(vH) && (exalt || own);
     }
   },
@@ -943,8 +1008,9 @@ const YOGA_DEFS = [
     check: (pd, ls) => {
       if (!ls || !pd['Saturn']) return false;
       const sH = houseNum(pd['Saturn'].sign, ls);
+      if (!sH) return false;
       const exalt = EXALTATION['Saturn'] === pd['Saturn'].sign;
-      const own = (PLANET_RULES['Saturn']||[]).includes(pd['Saturn'].sign);
+      const own = (PLANET_RULES['Saturn'] || []).includes(pd['Saturn'].sign);
       return [1,4,7,10].includes(sH) && (exalt || own);
     }
   },
@@ -954,8 +1020,9 @@ const YOGA_DEFS = [
     check: (pd, ls) => {
       if (!ls || !pd['Mars']) return false;
       const mH = houseNum(pd['Mars'].sign, ls);
+      if (!mH) return false;
       const exalt = EXALTATION['Mars'] === pd['Mars'].sign;
-      const own = (PLANET_RULES['Mars']||[]).includes(pd['Mars'].sign);
+      const own = (PLANET_RULES['Mars'] || []).includes(pd['Mars'].sign);
       return [1,4,7,10].includes(mH) && (exalt || own);
     }
   },
@@ -968,7 +1035,11 @@ const YOGA_DEFS = [
       const prev = SIGNS[(moonIdx - 1 + 12) % 12];
       const next = SIGNS[(moonIdx + 1) % 12];
       const pids = ['Sun','Mars','Mercury','Jupiter','Venus','Saturn'];
-      return !pids.some(p => pd[p] && (pd[p].sign === prev || pd[p].sign === next || pd[p].sign === pd['Moon'].sign));
+      // FIX #5: safe null guard before accessing .sign
+      return !pids.some(p => {
+        const d = pd[p];
+        return d && (d.sign === prev || d.sign === next || d.sign === pd['Moon'].sign);
+      });
     }
   }
 ];
@@ -1014,8 +1085,9 @@ const TRANS = {
     noLagna:'(ఇంటి సమాచారం చూడటానికి లగ్నాని ఉంచండి)',
     center1:'దక్షిణ భారతీయ', center2:'చార్ట్',
     exalted:'ఉచ్చ', debilitated:'నీచ', ownSign:'స్వ',
+    // FIX #18: separate Saturn (శని) and Venus (శుక్రుడు) symbols clearly
     pnames:{Lagna:'లగ్న',Sun:'సూర్యుడు',Moon:'చంద్రుడు',Mars:'కుజుడు',Mercury:'బుధుడు',Jupiter:'గురుడు',Venus:'శుక్రుడు',Saturn:'శని',Rahu:'రాహువు',Ketu:'కేతువు'},
-    psym:{Lagna:'ల',Sun:'సూ',Moon:'చం',Mars:'కు',Mercury:'బు',Jupiter:'గు',Venus:'శు',Saturn:'శ',Rahu:'రా',Ketu:'కే'},
+    psym:{Lagna:'ల',Sun:'సూ',Moon:'చం',Mars:'కు',Mercury:'బు',Jupiter:'గు',Venus:'శుక్ర',Saturn:'శని',Rahu:'రా',Ketu:'కే'},
     snames:{Aries:'మేషం',Taurus:'వృషభం',Gemini:'మిథునం',Cancer:'కర్కాటకం',Leo:'సింహం',Virgo:'కన్య',Libra:'తుల',Scorpio:'వృశ్చికం',Sagittarius:'ధనుస్సు',Capricorn:'మకరం',Aquarius:'కుంభం',Pisces:'మీనం'},
     ssym:{Aries:'మే',Taurus:'వృ',Gemini:'మి',Cancer:'క',Leo:'సిం',Virgo:'కన్య',Libra:'తు',Scorpio:'వృశ్చి',Sagittarius:'ధను',Capricorn:'మక',Aquarius:'కుం',Pisces:'మీ'},
     hn:{1:'1వ ఇల్లు',2:'2వ ఇల్లు',3:'3వ ఇల్లు',4:'4వ ఇల్లు',5:'5వ ఇల్లు',6:'6వ ఇల్లు',7:'7వ ఇల్లు',8:'8వ ఇల్లు',9:'9వ ఇల్లు',10:'10వ ఇల్లు',11:'11వ ఇల్లు',12:'12వ ఇల్లు'}
@@ -1032,16 +1104,21 @@ let activePlanetForRetro = null;
 let dragState = null;
 let lastDragEndTime = 0;
 
+// FIX #14: debounce timer refs for expensive re-computations
+let yogaDebounceTimer = null;
+let aspectDebounceTimer = null;
+
 /* ─── Helpers ───────────────────────────────── */
 const T = () => TRANS[lang];
 function getEl(sel) { return document.querySelector(sel); }
 function getAll(sel) { return document.querySelectorAll(sel); }
 
+// FIX #4: houseNum now requires explicit lagnaSign arg; no silent global fallback
 function houseNum(sign, ls) {
-  const lagna = ls !== undefined ? ls : lagnaSign;
-  if (!lagna) return null;
-  const a = SIGNS.indexOf(lagna);
+  if (!ls) return null;
+  const a = SIGNS.indexOf(ls);
   const s = SIGNS.indexOf(sign);
+  if (a < 0 || s < 0) return null;
   return (s - a + 12) % 12 + 1;
 }
 
@@ -1070,6 +1147,9 @@ function buildPlanet(pid) {
   const el = document.createElement('span');
   el.className = `planet ${pid}`;
   el.dataset.pid = pid;
+  el.setAttribute('tabindex', '0');
+  el.setAttribute('role', 'button');
+  el.setAttribute('aria-label', T().pnames[pid] || pid);
   refreshPlanetContent(el);
   return el;
 }
@@ -1081,16 +1161,18 @@ function refreshPlanetContent(el) {
   const d = planetData[pid];
   let html = sym;
   if (d) {
-    html += `<span class="deg-label">${d.degree.toFixed(1)}°</span>`;
-    if (d.retro) html += `<span class="retro-mark">R</span>`;
+    html += `<span class="deg-label" aria-hidden="true">${d.degree.toFixed(1)}°</span>`;
+    if (d.retro) html += `<span class="retro-mark" aria-label="retrograde" title="Retrograde">R</span>`;
   }
   el.innerHTML = html;
+  el.setAttribute('aria-label', `${t.pnames[pid] || pid}${d ? ' ' + d.degree.toFixed(1) + ' degrees' : ''}${d?.retro ? ' retrograde' : ''}`);
 }
 
 function refreshAllPlanets() {
   document.querySelectorAll('.planet').forEach(el => refreshPlanetContent(el));
 }
 
+// FIX #17: rebuildBank is now called on init AND after any change that could desync
 function rebuildBank() {
   const bank = getEl('#planetBank');
   const inChart = new Set(
@@ -1106,7 +1188,8 @@ function rebuildBank() {
 function updateHouseNums() {
   getAll('.cell[data-sign]').forEach(cell => {
     const hn = cell.querySelector('.house-num');
-    const n = houseNum(cell.dataset.sign);
+    // FIX #4: always pass lagnaSign explicitly
+    const n = houseNum(cell.dataset.sign, lagnaSign);
     hn.textContent = (n && !numsHidden) ? n : '';
   });
 }
@@ -1118,14 +1201,37 @@ function updateSignLabels() {
     const sign = el.dataset.sign;
     el.textContent = t.ssym[sign] || sign.slice(0,2);
     el.classList.toggle('hidden-label', signsHidden);
+    el.setAttribute('aria-label', `${t.snames[sign] || sign} sign info`);
+    el.setAttribute('aria-hidden', signsHidden ? 'true' : 'false');
+    if (signsHidden) el.setAttribute('tabindex', '-1');
+    else el.setAttribute('tabindex', '0');
   });
 }
 
-/* ─── Yoga Detection ────────────────────────── */
+/* ─── Overflow indicator ────────────────────── */
+// FIX #8: mark cells with too many planets
+function updateOverflowIndicators() {
+  getAll('.cell[data-sign]').forEach(cell => {
+    const area = cell.querySelector('.planets-area');
+    const count = area ? area.querySelectorAll('.planet').length : 0;
+    cell.classList.toggle('overcrowded', count >= 4);
+  });
+}
+
+/* ─── Yoga Detection (debounced) ────────────── */
+// FIX #14: debounce so rapid degree-scrubbing doesn't run detection on every frame
+function scheduleYogaUpdate() {
+  clearTimeout(yogaDebounceTimer);
+  yogaDebounceTimer = setTimeout(detectYogas, 120);
+}
+
 function detectYogas() {
   const panel = getEl('#yogasPanel');
   panel.innerHTML = '';
-  const detected = YOGA_DEFS.filter(y => y.check(planetData, lagnaSign));
+  const detected = YOGA_DEFS.filter(y => {
+    try { return y.check(planetData, lagnaSign); }
+    catch(e) { return false; }  // FIX #5: swallow unexpected errors gracefully
+  });
 
   if (detected.length === 0) {
     panel.innerHTML = `<div class="yoga-empty">No yogas detected yet. Place more planets in the chart.</div>`;
@@ -1136,7 +1242,7 @@ function detectYogas() {
   detected.forEach(y => {
     const card = document.createElement('div');
     card.className = 'yoga-card';
-    card.innerHTML = `<div class="yoga-icon">${y.icon}</div>
+    card.innerHTML = `<div class="yoga-icon" aria-hidden="true">${y.icon}</div>
       <div>
         <div class="yoga-name">${y.name}</div>
         <div class="yoga-desc">${y.desc}</div>
@@ -1145,10 +1251,16 @@ function detectYogas() {
   });
 
   const area = getEl('#yogaBadgeArea');
-  area.innerHTML = `<div class="yoga-badge detected">${detected.length} Yoga${detected.length>1?'s':''}</div>`;
+  area.innerHTML = `<div class="yoga-badge detected" aria-live="polite">${detected.length} Yoga${detected.length>1?'s':''}</div>`;
 }
 
-/* ─── Aspects Detection ─────────────────────── */
+/* ─── Aspects Detection (debounced) ────────── */
+// FIX #14: debounce aspects too
+function scheduleAspectUpdate() {
+  clearTimeout(aspectDebounceTimer);
+  aspectDebounceTimer = setTimeout(updateAspects, 120);
+}
+
 function updateAspects() {
   const panel = getEl('#aspectsPanel');
   const placed = ALL_PIDS.filter(p => p !== 'Lagna' && planetData[p]);
@@ -1164,16 +1276,20 @@ function updateAspects() {
   placed.forEach(pid => {
     if (!SPECIAL_ASPECTS[pid]) return;
     const d = planetData[pid];
-    const fromH = houseNum(d.sign);
+    // FIX #4: explicit lagnaSign
+    const fromH = houseNum(d.sign, lagnaSign);
     if (!fromH) return;
 
     const aspectedHouses = SPECIAL_ASPECTS[pid].map(rel => ((fromH - 1 + rel - 1) % 12) + 1);
     const aspectedSigns = SIGNS.filter(s => {
-      const h = houseNum(s);
+      const h = houseNum(s, lagnaSign);
       return h && aspectedHouses.includes(h);
     });
 
-    const aspectedPlanets = placed.filter(p2 => p2 !== pid && aspectedSigns.includes(planetData[p2]?.sign));
+    const aspectedPlanets = placed.filter(p2 => {
+      // FIX #6: guard against missing data
+      return p2 !== pid && planetData[p2] && aspectedSigns.includes(planetData[p2].sign);
+    });
 
     if (aspectedPlanets.length === 0 && aspectedSigns.length > 0) {
       html += `<div class="aspect-entry">
@@ -1185,12 +1301,14 @@ function updateAspects() {
     }
 
     aspectedPlanets.forEach(p2 => {
-      const toH = houseNum(planetData[p2].sign);
+      // FIX #6: guard
+      if (!planetData[p2]) return;
+      const toH = houseNum(planetData[p2].sign, lagnaSign);
       html += `<div class="aspect-entry">
-        <span class="planet ${pid}" style="pointer-events:none;transform:none;box-shadow:none;font-size:0.62rem;padding:2px 6px">${t.psym[pid]}</span>
-        <span style="color:var(--accent);font-size:0.85rem">→</span>
-        <span class="planet ${p2}" style="pointer-events:none;transform:none;box-shadow:none;font-size:0.62rem;padding:2px 6px">${t.psym[p2]}</span>
-        <span style="color:var(--text-dim);font-size:0.76rem">${t.pnames[pid]} → ${t.pnames[p2]} in H${toH}</span>
+        <span class="planet ${pid}" style="pointer-events:none;transform:none;box-shadow:none;font-size:0.62rem;padding:2px 6px" aria-hidden="true">${t.psym[pid]}</span>
+        <span style="color:var(--accent);font-size:0.85rem" aria-hidden="true">→</span>
+        <span class="planet ${p2}" style="pointer-events:none;transform:none;box-shadow:none;font-size:0.62rem;padding:2px 6px" aria-hidden="true">${t.psym[p2]}</span>
+        <span style="color:var(--text-dim);font-size:0.76rem">${t.pnames[pid]} aspects ${t.pnames[p2]} in H${toH}</span>
       </div>`;
       anyFound = true;
     });
@@ -1215,7 +1333,8 @@ function generatePrompt() {
   ALL_PIDS.filter(p => p !== 'Lagna' && planetData[p]).forEach(pid => {
     const d = planetData[pid];
     const nak = getNakshatra(d.sign, d.degree);
-    const hn = lagnaSign ? houseNum(d.sign) : null;
+    // FIX #4: explicit lagnaSign
+    const hn = lagnaSign ? houseNum(d.sign, lagnaSign) : null;
     const strength = getStrength(pid, d.sign);
     let line = `${t.pnames[pid]}: ${d.sign} at ${d.degree.toFixed(2)}° — ${nak.name} Nakshatra (Pada ${nak.pada}, Lord: ${nak.lord})`;
     if (hn) line += `, ${t.hn[hn]}`;
@@ -1224,7 +1343,10 @@ function generatePrompt() {
     planetLines.push(line);
   });
 
-  const detectedYogas = YOGA_DEFS.filter(y => y.check(planetData, lagnaSign)).map(y => y.name);
+  const detectedYogas = YOGA_DEFS.filter(y => {
+    try { return y.check(planetData, lagnaSign); }
+    catch(e) { return false; }
+  }).map(y => y.name);
 
   const prompt = `I have a South Indian Vedic (Jyotisha) natal chart with the following planetary positions. Please analyze this chart using classical Vedic astrology principles (Parashari system).
 
@@ -1290,7 +1412,9 @@ function showTooltip(pid, x, y) {
   if (lagnaSign && PLANET_RULES[pid]) {
     html += `<hr><div style="color:var(--gold);font-family:'Cinzel',serif;font-size:0.7rem;margin-bottom:2px">${t.houseLord}</div>`;
     PLANET_RULES[pid].forEach(rs => {
-      const hn = houseNum(rs);
+      // FIX #4: explicit lagnaSign
+      const hn = houseNum(rs, lagnaSign);
+      if (!hn) return;
       const hnName = t.hn[hn] || `H${hn}`;
       const kws = HOUSE_KW[hn] || '';
       html += `<div class="trow">${t.lordOf} ${hnName}: <span>${kws.split(',').slice(0,2).join(',')}</span></div>`;
@@ -1299,7 +1423,8 @@ function showTooltip(pid, x, y) {
 
   tooltip.innerHTML = html;
   tooltip.classList.add('visible');
-  positionFloating(tooltip, x, y);
+  // FIX #9: use setTimeout to allow browser to render before measuring dimensions
+  setTimeout(() => positionFloating(tooltip, x, y), 0);
 }
 
 function hideTooltip() { tooltip.classList.remove('visible'); }
@@ -1325,7 +1450,8 @@ function showSignPanel(sign, x, y) {
   hideAllPanels();
   const t = T();
   const sd = SIGN_DATA[sign];
-  const hn = houseNum(sign);
+  // FIX #4: explicit lagnaSign
+  const hn = houseNum(sign, lagnaSign);
   getEl('#spSignName').textContent = `${sd?.symbol || ''} ${t.snames[sign] || sign}`;
   let body = '';
   if (hn) {
@@ -1342,7 +1468,8 @@ function showSignPanel(sign, x, y) {
   getEl('#spBody').innerHTML = body;
   signPanel.classList.add('visible');
   getEl('#overlay').classList.add('visible');
-  positionFloating(signPanel, x, y);
+  // FIX #9: defer positioning until DOM is painted
+  setTimeout(() => positionFloating(signPanel, x, y), 0);
 }
 
 function hideSignPanel() { signPanel.classList.remove('visible'); }
@@ -1362,7 +1489,8 @@ function showRetroPanel(pid, x, y) {
   degInput.value = planetData[pid]?.degree?.toFixed(2) ?? '0';
   retroPanel.classList.add('visible');
   getEl('#overlay').classList.add('visible');
-  positionFloating(retroPanel, x, y);
+  // FIX #9: defer positioning until DOM is painted
+  setTimeout(() => positionFloating(retroPanel, x, y), 0);
 }
 
 function hideRetroPanel() {
@@ -1382,22 +1510,42 @@ retroCheck.addEventListener('change', () => {
   planetData[activePlanetForRetro].retro = retroCheck.checked;
   const el = document.querySelector(`.planets-area .planet[data-pid="${activePlanetForRetro}"]`);
   if (el) refreshPlanetContent(el);
-  detectYogas();
+  saveState();
+  scheduleYogaUpdate();
 });
 
+// FIX #11: clamp the degree value on blur rather than on every keystroke mid-edit
 degInput.addEventListener('input', () => {
   if (!activePlanetForRetro || !planetData[activePlanetForRetro]) return;
   let v = parseFloat(degInput.value);
   if (isNaN(v)) return;
+  // Allow typing freely; only update the model (not the input value itself)
   v = Math.max(0, Math.min(29.99, v));
   planetData[activePlanetForRetro].degree = v;
   const el = document.querySelector(`.planets-area .planet[data-pid="${activePlanetForRetro}"]`);
   if (el) refreshPlanetContent(el);
-  detectYogas();
+  saveState();
+  scheduleYogaUpdate();
+});
+
+// FIX #11: clamp and sync the displayed value on blur
+degInput.addEventListener('blur', () => {
+  if (!activePlanetForRetro || !planetData[activePlanetForRetro]) return;
+  let v = parseFloat(degInput.value);
+  if (isNaN(v)) v = 0;
+  v = Math.max(0, Math.min(29.99, parseFloat(v.toFixed(2))));
+  planetData[activePlanetForRetro].degree = v;
+  degInput.value = v.toFixed(2);
+  const el = document.querySelector(`.planets-area .planet[data-pid="${activePlanetForRetro}"]`);
+  if (el) refreshPlanetContent(el);
+  saveState();
+  scheduleYogaUpdate();
 });
 
 getEl('#retroClose').addEventListener('click', hideAllPanels);
+getEl('#retroClose').addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') hideAllPanels(); });
 getEl('#spClose').addEventListener('click', hideAllPanels);
+getEl('#spClose').addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') hideAllPanels(); });
 getEl('#overlay').addEventListener('click', hideAllPanels);
 
 /* ─── Move planet into chart sign ───────────── */
@@ -1415,8 +1563,10 @@ function movePlanetToSign(pid, targetSign) {
   const el = buildPlanet(pid);
   area.appendChild(el);
   updateHouseNums();
-  detectYogas();
-  updateAspects();
+  updateOverflowIndicators();
+  saveState();
+  scheduleYogaUpdate();
+  scheduleAspectUpdate();
 }
 
 /* ─── Return planet to bank ─────────────────── */
@@ -1426,19 +1576,17 @@ function returnPlanetToBank(pid) {
   existing.remove();
   delete planetData[pid];
   if (pid === 'Lagna') { lagnaSign = null; updateHouseNums(); }
-  const bank = getEl('#planetBank');
-  const el = buildPlanet(pid);
-  const after = ALL_PIDS.slice(ALL_PIDS.indexOf(pid) + 1)
-    .map(id => bank.querySelector(`.planet[data-pid="${id}"]`))
-    .find(Boolean);
-  if (after) bank.insertBefore(el, after);
-  else bank.appendChild(el);
-  detectYogas();
-  updateAspects();
+  updateOverflowIndicators();
+  // FIX #17: always use rebuildBank for consistent ordering
+  rebuildBank();
+  saveState();
+  scheduleYogaUpdate();
+  scheduleAspectUpdate();
 }
 
 /* ═══ DRAG & DROP (Pointer Events) ═══ */
 const ghost = getEl('#drag-ghost');
+
 document.addEventListener('pointerdown', onPointerDown, {passive: false});
 document.addEventListener('pointermove', onPointerMove, {passive: false});
 document.addEventListener('pointerup',   onPointerUp,   {passive: false});
@@ -1469,11 +1617,13 @@ function onPointerMove(e) {
   const dist = Math.hypot(dx, dy);
   if (dist < 5) return;
   dragState.moved = true;
+
   if (dragState.inChart && !dragState.directionLocked) {
     dragState.isDegreeMode    = Math.abs(dy) > Math.abs(dx);
     dragState.directionLocked = true;
     dragState.initDeg = planetData[dragState.pid]?.degree ?? 0;
   }
+
   if (dragState.isDegreeMode) {
     const delta = (dragState.startY - e.clientY) / 22;
     let newDeg = dragState.initDeg + delta;
@@ -1485,6 +1635,7 @@ function onPointerMove(e) {
     }
     return;
   }
+
   if (!dragState.ghostShown) {
     dragState.ghostShown = true;
     dragState.sourceEl.classList.add('dragging');
@@ -1504,33 +1655,51 @@ function onPointerMove(e) {
     });
     return;
   }
+
   const w = ghost.offsetWidth  || 50;
   const h = ghost.offsetHeight || 26;
   ghost.style.left = (e.clientX - w / 2) + 'px';
   ghost.style.top  = (e.clientY - h / 2) + 'px';
+
   getAll('.cell.drop-active, .planet-bank.drop-active').forEach(el => el.classList.remove('drop-active'));
   const under = getDropTarget(e.clientX, e.clientY);
   if (under) under.classList.add('drop-active');
 }
 
+// FIX #1 & #2: capture all state we need before any mutation, avoid null-after-nulled reads
 function onPointerUp(e) {
   if (!dragState || e.pointerId !== dragState.pointerId) return;
   e.preventDefault();
+
+  // Snapshot everything we need BEFORE cleanupDrag mutates state
+  const { pid, moved, isDegreeMode, inChart } = dragState;
+
   cleanupDrag();
-  const pid = dragState.pid;
-  if (!dragState.moved) {
-    if (dragState.inChart && planetData[pid]) showRetroPanel(pid, e.clientX, e.clientY);
+
+  if (!moved) {
+    // Tap: open retro panel if placed in chart
+    if (inChart && planetData[pid]) {
+      showRetroPanel(pid, e.clientX, e.clientY);
+    }
     dragState = null;
     return;
   }
-  if (dragState.isDegreeMode) { dragState = null; return; }
+
+  if (isDegreeMode) {
+    // Degree scrub ended — persist the final value
+    saveState();
+    dragState = null;
+    return;
+  }
+
   lastDragEndTime = Date.now();
   const under = getDropTarget(e.clientX, e.clientY);
+  dragState = null; // null AFTER we've read all needed fields above
+
   if (under) {
     if (under.id === 'planetBank') returnPlanetToBank(pid);
     else if (under.dataset.sign) movePlanetToSign(pid, under.dataset.sign);
   }
-  dragState = null;
 }
 
 function onPointerCancel(e) {
@@ -1565,7 +1734,8 @@ function getDropTarget(x, y) {
 let lastTap = {pid: null, time: 0};
 
 document.addEventListener('click', (e) => {
-  if (Date.now() - lastDragEndTime < 300) return;
+  // FIX #3: use a tighter guard — only block if drag just ended within 400ms
+  if (Date.now() - lastDragEndTime < 400) return;
   const planetEl = e.target.closest('.planet');
   if (!planetEl || !planetEl.closest('.planets-area')) return;
   const pid = planetEl.dataset.pid;
@@ -1579,12 +1749,27 @@ document.addEventListener('click', (e) => {
   }
 });
 
-/* ─── Sign label click ──────────────────────── */
+/* ─── Keyboard: Enter/Space on sign-abbr ─────── */
+// FIX #12: keyboard interaction for sign labels
 getAll('.sign-abbr').forEach(el => {
-  el.addEventListener('mouseenter', (ev) => {
-    if (!signsHidden) showSignPanel(el.dataset.sign, ev.clientX, ev.clientY);
+  el.addEventListener('keydown', (ev) => {
+    if ((ev.key === 'Enter' || ev.key === ' ') && !signsHidden) {
+      ev.preventDefault();
+      const rect = el.getBoundingClientRect();
+      showSignPanel(el.dataset.sign, rect.right, rect.bottom);
+    }
   });
+});
+
+/* ─── Sign label click ──────────────────────── */
+// FIX #10: removed mouseenter handler; click-only on desktop to prevent double-open
+getAll('.sign-abbr').forEach(el => {
   el.addEventListener('click', (ev) => {
+    // Don't open if the panel is already showing for this sign
+    if (signPanel.classList.contains('visible')) {
+      hideAllPanels();
+      return;
+    }
     ev.stopPropagation();
     if (!signsHidden) showSignPanel(el.dataset.sign, ev.clientX, ev.clientY);
   });
@@ -1604,9 +1789,13 @@ document.addEventListener('mousemove', (e) => {
 /* ─── Tabs ──────────────────────────────────── */
 document.querySelectorAll('.tab-btn').forEach(btn => {
   btn.addEventListener('click', () => {
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => {
+      b.classList.remove('active');
+      b.setAttribute('aria-selected', 'false');
+    });
     document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
     btn.classList.add('active');
+    btn.setAttribute('aria-selected', 'true');
     const tabId = btn.dataset.tab;
     document.getElementById(`tab-${tabId}`).classList.add('active');
     if (tabId === 'aspects') updateAspects();
@@ -1616,27 +1805,31 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
 
 getEl('#btnGenPrompt').addEventListener('click', generatePrompt);
 
-getEl('#btnCopyPrompt').addEventListener('click', () => {
+// FIX #16: replaced deprecated execCommand with Clipboard API only; no fallback to execCommand
+getEl('#btnCopyPrompt').addEventListener('click', async () => {
   const text = getEl('#promptOutput').textContent;
   if (!text) return;
-  navigator.clipboard.writeText(text).then(() => {
-    const toast = getEl('#copyToast');
-    toast.classList.add('show');
-    setTimeout(() => toast.classList.remove('show'), 2200);
-  }).catch(() => {
-    const ta = document.createElement('textarea');
-    ta.value = text;
-    ta.style.position = 'fixed';
-    ta.style.opacity = '0';
-    document.body.appendChild(ta);
-    ta.select();
-    document.execCommand('copy');
-    document.body.removeChild(ta);
-    const toast = getEl('#copyToast');
-    toast.classList.add('show');
-    setTimeout(() => toast.classList.remove('show'), 2200);
-  });
+  try {
+    await navigator.clipboard.writeText(text);
+    showCopyToast();
+  } catch (err) {
+    // Fallback: select text for manual copy if clipboard API unavailable
+    const output = getEl('#promptOutput');
+    const range = document.createRange();
+    range.selectNodeContents(output);
+    const sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+    showCopyToast('Text selected — press Ctrl+C / Cmd+C to copy');
+  }
 });
+
+function showCopyToast(msg) {
+  const toast = getEl('#copyToast');
+  toast.textContent = msg || '✓ Copied to clipboard!';
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2200);
+}
 
 /* ─── Buttons ───────────────────────────────── */
 getEl('#btnSigns').addEventListener('click', () => {
@@ -1661,10 +1854,12 @@ getEl('#btnClear').addEventListener('click', () => {
   ghost.style.display = 'none';
   rebuildBank();
   applyLang();
-  detectYogas();
-  updateAspects();
+  scheduleYogaUpdate();
+  scheduleAspectUpdate();
+  updateOverflowIndicators();
   getEl('#promptOutput').textContent = '';
   hideAllPanels();
+  clearSavedState();
 });
 
 getEl('#lang').addEventListener('change', (e) => {
@@ -1683,9 +1878,93 @@ document.addEventListener('pointerdown', (e) => {
   hideAllPanels();
 }, {capture: true});
 
+/* ═══ FIX #15: localStorage persistence ═══ */
+const STORAGE_KEY = 'vedic-chart-v1';
+
+function saveState() {
+  try {
+    const state = { planetData, lagnaSign, lang };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    // Show save indicator briefly
+    const notice = getEl('#persistNotice');
+    notice.classList.add('show');
+    clearTimeout(notice._timer);
+    notice._timer = setTimeout(() => notice.classList.remove('show'), 1800);
+  } catch(e) {
+    // localStorage might be unavailable (private mode, storage full)
+  }
+}
+
+function clearSavedState() {
+  try { localStorage.removeItem(STORAGE_KEY); } catch(e) {}
+}
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return false;
+    const state = JSON.parse(raw);
+    if (!state || typeof state !== 'object') return false;
+
+    // Restore language
+    if (state.lang && TRANS[state.lang]) {
+      lang = state.lang;
+      getEl('#lang').value = lang;
+    }
+
+    // Restore planet data
+    if (state.planetData && typeof state.planetData === 'object') {
+      planetData = {};
+      for (const [pid, d] of Object.entries(state.planetData)) {
+        if (!ALL_PIDS.includes(pid)) continue;
+        if (!SIGNS.includes(d?.sign)) continue;
+        planetData[pid] = {
+          sign:   d.sign,
+          degree: Math.max(0, Math.min(29.99, parseFloat(d.degree) || 0)),
+          retro:  !!d.retro
+        };
+      }
+    }
+
+    // Restore lagnaSign
+    if (state.lagnaSign && SIGNS.includes(state.lagnaSign)) {
+      lagnaSign = state.lagnaSign;
+    } else if (planetData['Lagna']) {
+      lagnaSign = planetData['Lagna'].sign;
+    }
+
+    return true;
+  } catch(e) {
+    return false;
+  }
+}
+
+function restorePlanetsFromState() {
+  // Place each planet into its stored sign
+  for (const pid of ALL_PIDS) {
+    if (!planetData[pid]) continue;
+    const d = planetData[pid];
+    const area = document.querySelector(`.planets-area[data-sign="${d.sign}"]`);
+    if (!area) continue;
+    const el = buildPlanet(pid);
+    area.appendChild(el);
+  }
+  // Remove restored planets from the bank
+  rebuildBank();
+}
+
 /* ─── Init ──────────────────────────────────── */
+const hadSaved = loadState();
 applyLang();
-detectYogas();
+
+if (hadSaved) {
+  restorePlanetsFromState();
+}
+
+updateHouseNums();
+updateOverflowIndicators();
+scheduleYogaUpdate();
+scheduleAspectUpdate();
 </script>
 </body>
 </html>
