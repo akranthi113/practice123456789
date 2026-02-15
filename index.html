@@ -8,46 +8,44 @@
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #0d0d14;
-  --surface: #13131f;
-  --card: #1a1a2e;
-  --card2: #16213e;
-  --border: #2a2a4a;
-  --border-bright: #3d3d6b;
-  --gold: #c9a84c;
-  --gold-light: #e8c97a;
-  --gold-dim: #7a6330;
-  --accent: #6c8ebf;
-  --accent-light: #93b4e8;
-  --text: #e8e0d0;
-  --text-dim: #8a8098;
-  --text-muted: #4a4460;
-  --red: #e05c5c;
-  --green: #5cb85c;
-  --sun: #ffd166;
-  --moon: #d4d4e8;
-  --mars: #e05c5c;
-  --mercury: #4ecb71;
-  --jupiter: #f0a500;
-  --venus: #e8659a;
-  --saturn: #7986cb;
-  --rahu: #9e9e9e;
-  --ketu: #8d6e63;
-  --shadow: 0 4px 24px rgba(0,0,0,0.6);
-  --glow: 0 0 20px rgba(201,168,76,0.15);
+  --bg: #f5f0e8;
+  --surface: #ffffff;
+  --card: #fdfaf5;
+  --card2: #f0ebe0;
+  --border: #d8ccb4;
+  --border-bright: #b8a888;
+  --gold: #8b6914;
+  --gold-light: #a8821e;
+  --gold-dim: #c4a44a;
+  --accent: #4a6fa5;
+  --accent-light: #6389bf;
+  --text: #2c2416;
+  --text-dim: #6b5b3e;
+  --text-muted: #a8956e;
+  --red: #c0392b;
+  --green: #27ae60;
+  --sun: #f39c12;
+  --moon: #7f8c8d;
+  --mars: #c0392b;
+  --mercury: #27ae60;
+  --jupiter: #e67e22;
+  --venus: #e91e8c;
+  --saturn: #5c6bc0;
+  --rahu: #607d8b;
+  --ketu: #795548;
+  --shadow: 0 2px 16px rgba(139,105,20,0.12);
+  --glow: 0 0 0 1px rgba(184,168,136,0.3);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
   background: var(--bg);
-  background-image:
-    radial-gradient(ellipse at 20% 20%, rgba(108,142,191,0.05) 0%, transparent 60%),
-    radial-gradient(ellipse at 80% 80%, rgba(201,168,76,0.05) 0%, transparent 60%);
+  background-image: radial-gradient(ellipse at 30% 10%, rgba(139,105,20,0.06) 0%, transparent 50%);
   color: var(--text);
   font-family: 'Crimson Pro', Georgia, serif;
   min-height: 100vh;
-  padding: 16px;
+  padding: 20px 16px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -55,51 +53,44 @@ body {
   overflow-x: hidden;
 }
 
-/* ─── Header ─────────────────────────────────────── */
 .app-header {
   text-align: center;
   margin-bottom: 20px;
   width: 100%;
-  max-width: 640px;
+  max-width: 600px;
 }
 .app-title {
   font-family: 'Cinzel', serif;
-  font-size: clamp(1.1rem, 4vw, 1.7rem);
+  font-size: clamp(1rem, 3.5vw, 1.5rem);
   font-weight: 700;
   color: var(--gold);
   letter-spacing: 0.08em;
-  text-shadow: 0 0 30px rgba(201,168,76,0.4);
   line-height: 1.3;
 }
 .app-subtitle {
   font-size: 0.85rem;
-  color: var(--text-dim);
+  color: var(--text-muted);
   margin-top: 4px;
   font-style: italic;
 }
 
-/* ─── Main Wrapper ───────────────────────────────── */
 .app-wrap {
   width: 100%;
-  max-width: 640px;
+  max-width: 600px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 14px;
 }
 
-/* ─── Language Row ───────────────────────────────── */
 .lang-row {
   display: flex;
   justify-content: flex-end;
   align-items: center;
   gap: 8px;
 }
-.lang-label {
-  font-size: 0.8rem;
-  color: var(--text-dim);
-}
+.lang-label { font-size: 0.8rem; color: var(--text-muted); }
 select#lang {
-  background: var(--card);
+  background: var(--surface);
   color: var(--text);
   border: 1px solid var(--border-bright);
   border-radius: 6px;
@@ -108,23 +99,22 @@ select#lang {
   font-size: 0.85rem;
   cursor: pointer;
   outline: none;
-  -webkit-appearance: none;
 }
 
-/* ─── Chart Grid ─────────────────────────────────── */
+/* Chart Grid */
 .chart-wrap {
   position: relative;
   background: var(--surface);
-  border: 1px solid var(--border-bright);
-  border-radius: 12px;
+  border: 2px solid var(--border-bright);
+  border-radius: 10px;
   overflow: hidden;
-  box-shadow: var(--shadow), var(--glow);
+  box-shadow: var(--shadow);
 }
 
 .chart-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(4, minmax(80px, 1fr));
+  grid-template-rows: repeat(4, minmax(78px, 1fr));
   gap: 1px;
   background: var(--border);
   grid-template-areas:
@@ -143,11 +133,11 @@ select#lang {
   align-items: center;
   justify-content: flex-start;
   padding: 4px;
-  min-height: 80px;
+  min-height: 78px;
   overflow: visible;
   transition: background 0.15s;
 }
-.cell.drop-active { background: rgba(108,142,191,0.18); outline: 2px dashed var(--accent-light); outline-offset: -2px; }
+.cell.drop-active { background: rgba(74,111,165,0.1); outline: 2px dashed var(--accent-light); outline-offset: -2px; }
 
 .cell[data-sign="Pisces"]      { grid-area: pisces; }
 .cell[data-sign="Aries"]       { grid-area: aries; }
@@ -170,14 +160,30 @@ select#lang {
   align-items: center;
   justify-content: center;
   gap: 4px;
+  border: none;
 }
 .center-line {
   font-family: 'Cinzel', serif;
-  font-size: 0.65rem;
+  font-size: 0.62rem;
   color: var(--text-muted);
-  letter-spacing: 0.15em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
 }
+
+.yoga-badge {
+  font-family: 'Cinzel', serif;
+  font-size: 0.56rem;
+  color: var(--gold-dim);
+  background: rgba(139,105,20,0.08);
+  border: 1px solid rgba(139,105,20,0.2);
+  border-radius: 3px;
+  padding: 1px 4px;
+  margin-top: 2px;
+  text-align: center;
+  line-height: 1.3;
+  max-width: 88px;
+}
+.yoga-badge.detected { color: var(--gold); border-color: rgba(139,105,20,0.45); background: rgba(139,105,20,0.12); }
 
 .sign-abbr {
   position: absolute;
@@ -186,17 +192,17 @@ select#lang {
   font-family: 'Cinzel', serif;
   font-size: 0.6rem;
   font-weight: 600;
-  color: var(--gold-dim);
-  background: rgba(201,168,76,0.08);
+  color: var(--text-muted);
+  background: rgba(139,105,20,0.07);
   padding: 1px 4px;
   border-radius: 3px;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.04em;
   cursor: default;
-  transition: color 0.15s, background 0.15s;
   z-index: 2;
   user-select: none;
+  transition: background 0.15s, color 0.15s;
 }
-.sign-abbr:hover { color: var(--gold); background: rgba(201,168,76,0.18); }
+.sign-abbr:hover { color: var(--gold); background: rgba(139,105,20,0.15); }
 .sign-abbr.hidden-label { visibility: hidden; }
 
 .house-num {
@@ -204,10 +210,10 @@ select#lang {
   bottom: 3px;
   right: 4px;
   font-family: 'Cinzel', serif;
-  font-size: 0.62rem;
+  font-size: 0.6rem;
   color: var(--accent);
   font-weight: 700;
-  opacity: 0.85;
+  opacity: 0.75;
   z-index: 2;
 }
 .house-num.hidden-label { visibility: hidden; }
@@ -225,7 +231,7 @@ select#lang {
   padding: 2px;
 }
 
-/* ─── Planet Chips ───────────────────────────────── */
+/* Planet Chips */
 .planet {
   display: inline-flex;
   align-items: center;
@@ -233,87 +239,80 @@ select#lang {
   padding: 3px 7px;
   border-radius: 5px;
   font-family: 'Cinzel', serif;
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   font-weight: 600;
-  color: #111;
   cursor: pointer;
   user-select: none;
   white-space: nowrap;
-  transition: transform 0.15s, box-shadow 0.15s;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.4);
+  transition: transform 0.12s, box-shadow 0.12s;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.18);
   position: relative;
   touch-action: none;
   -webkit-touch-callout: none;
-  min-width: 36px;
+  min-width: 34px;
   justify-content: center;
   z-index: 3;
+  color: #fff;
 }
-.planet:hover { transform: translateY(-1px); box-shadow: 0 3px 8px rgba(0,0,0,0.5); }
-.planet.dragging { opacity: 0.35; }
+.planet:hover { transform: translateY(-1px); box-shadow: 0 2px 8px rgba(0,0,0,0.22); }
+.planet.dragging { opacity: 0.3; }
 
 .planet.Lagna {
   background: transparent !important;
   border: 2px solid var(--gold);
   color: var(--gold) !important;
-  font-size: 0.65rem;
-  box-shadow: 0 0 8px rgba(201,168,76,0.3);
+  font-size: 0.63rem;
+  box-shadow: 0 0 0 1px rgba(139,105,20,0.2);
 }
 .planet.Sun      { background: var(--sun); }
 .planet.Moon     { background: var(--moon); }
-.planet.Mars     { background: var(--mars); color: #fff !important; }
+.planet.Mars     { background: var(--mars); }
 .planet.Mercury  { background: var(--mercury); }
 .planet.Jupiter  { background: var(--jupiter); }
-.planet.Venus    { background: var(--venus); color: #fff !important; }
-.planet.Saturn   { background: var(--saturn); color: #fff !important; }
+.planet.Venus    { background: var(--venus); }
+.planet.Saturn   { background: var(--saturn); }
 .planet.Rahu     { background: var(--rahu); }
-.planet.Ketu     { background: var(--ketu); color: #fff !important; }
+.planet.Ketu     { background: var(--ketu); }
 
 .retro-mark {
-  font-size: 0.6rem;
-  color: var(--red);
+  font-size: 0.58rem;
+  color: #ffcccc;
   font-weight: 900;
   line-height: 1;
   margin-left: 1px;
   vertical-align: super;
 }
 .planet.Lagna .retro-mark { color: var(--red); }
-.planet.Mars .retro-mark,
-.planet.Venus .retro-mark,
-.planet.Saturn .retro-mark,
-.planet.Ketu .retro-mark { color: #ffa0a0; }
 
 .deg-label {
-  font-size: 0.58rem;
-  opacity: 0.8;
+  font-size: 0.55rem;
+  opacity: 0.85;
   font-family: 'Crimson Pro', serif;
   font-weight: 400;
-  letter-spacing: 0;
 }
 
-/* Ghost element for drag */
 #drag-ghost {
   position: fixed;
   pointer-events: none;
   z-index: 9999;
   opacity: 0.85;
-  transform: scale(1.15);
+  transform: scale(1.1);
   display: none;
-  transition: none !important;
 }
 
-/* ─── Controls Panel ─────────────────────────────── */
+/* Controls Panel */
 .panel {
   background: var(--surface);
-  border: 1px solid var(--border-bright);
+  border: 1px solid var(--border);
   border-radius: 10px;
   padding: 14px;
   box-shadow: var(--shadow);
 }
 .panel-title {
   font-family: 'Cinzel', serif;
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-weight: 600;
-  color: var(--gold-dim);
+  color: var(--text-muted);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   margin-bottom: 10px;
@@ -332,19 +331,15 @@ select#lang {
   transition: background 0.15s, border-color 0.15s;
 }
 .planet-bank.drop-active {
-  background: rgba(108,142,191,0.12);
+  background: rgba(74,111,165,0.08);
   border-color: var(--accent-light);
 }
-.planet-bank .planet {
-  font-size: 0.78rem;
-  padding: 5px 10px;
-  min-width: 44px;
-}
+.planet-bank .planet { font-size: 0.76rem; padding: 5px 10px; min-width: 42px; }
 
 .tip-box {
   font-size: 0.78rem;
   color: var(--text-dim);
-  background: rgba(201,168,76,0.07);
+  background: rgba(139,105,20,0.05);
   border-left: 3px solid var(--gold-dim);
   padding: 7px 10px;
   border-radius: 0 6px 6px 0;
@@ -361,129 +356,23 @@ select#lang {
   margin-top: 10px;
 }
 .btn {
-  padding: 8px 14px;
+  padding: 7px 14px;
   font-family: 'Cinzel', serif;
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   font-weight: 600;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.05em;
   border: 1px solid var(--border-bright);
-  background: rgba(255,255,255,0.04);
+  background: var(--surface);
   color: var(--text-dim);
   border-radius: 6px;
   cursor: pointer;
-  transition: all 0.18s;
+  transition: all 0.15s;
   text-transform: uppercase;
 }
-.btn:hover, .btn:active { background: rgba(255,255,255,0.1); color: var(--text); border-color: var(--gold-dim); }
-.btn.danger { border-color: rgba(224,92,92,0.4); color: var(--red); }
-.btn.danger:hover { background: rgba(224,92,92,0.12); }
+.btn:hover { background: var(--card2); color: var(--text); border-color: var(--gold-dim); }
+.btn.danger { border-color: rgba(192,57,43,0.35); color: var(--red); }
+.btn.danger:hover { background: rgba(192,57,43,0.07); }
 
-/* ─── Tooltip ────────────────────────────────────── */
-.tooltip {
-  position: fixed;
-  background: rgba(13,13,20,0.97);
-  border: 1px solid var(--border-bright);
-  border-radius: 8px;
-  padding: 10px 13px;
-  font-size: 0.8rem;
-  line-height: 1.6;
-  color: var(--text);
-  z-index: 5000;
-  pointer-events: none;
-  max-width: 280px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.7);
-  backdrop-filter: blur(8px);
-  display: none;
-}
-.tooltip.visible { display: block; }
-.tooltip strong { color: var(--gold); font-family: 'Cinzel', serif; font-size: 0.78rem; }
-.tooltip hr { border: none; border-top: 1px solid var(--border); margin: 6px 0; }
-.tooltip .trow { display: block; margin-bottom: 1px; }
-.tooltip .trow span { color: var(--text-dim); }
-
-/* ─── Retrograde Panel ───────────────────────────── */
-.retro-panel {
-  position: fixed;
-  background: rgba(18,18,30,0.98);
-  border: 1px solid var(--gold-dim);
-  border-radius: 10px;
-  padding: 14px;
-  z-index: 5000;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.7);
-  backdrop-filter: blur(10px);
-  display: none;
-  flex-direction: column;
-  gap: 10px;
-  min-width: 190px;
-}
-.retro-panel.visible { display: flex; }
-.retro-panel-title {
-  font-family: 'Cinzel', serif;
-  font-size: 0.78rem;
-  color: var(--gold);
-  font-weight: 700;
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 6px;
-}
-.retro-panel label {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  cursor: pointer;
-  font-size: 0.85rem;
-  color: var(--text);
-}
-.retro-panel input[type=checkbox] {
-  width: 18px; height: 18px;
-  accent-color: var(--gold);
-  cursor: pointer;
-}
-.retro-panel-close {
-  align-self: flex-end;
-  font-size: 0.7rem;
-  color: var(--text-dim);
-  cursor: pointer;
-  padding: 2px 6px;
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  font-family: 'Cinzel', serif;
-  letter-spacing: 0.05em;
-}
-.retro-panel-close:hover { color: var(--text); border-color: var(--border-bright); }
-
-/* ─── Sign Tooltip Panel ─────────────────────────── */
-.sign-panel {
-  position: fixed;
-  background: rgba(18,18,30,0.98);
-  border: 1px solid var(--border-bright);
-  border-radius: 10px;
-  padding: 12px 14px;
-  z-index: 5000;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.7);
-  backdrop-filter: blur(10px);
-  display: none;
-  flex-direction: column;
-  gap: 4px;
-  max-width: 260px;
-  font-size: 0.8rem;
-  line-height: 1.55;
-}
-.sign-panel.visible { display: flex; }
-.sign-panel strong { color: var(--gold); font-family: 'Cinzel', serif; font-size: 0.78rem; }
-.sign-panel hr { border: none; border-top: 1px solid var(--border); margin: 4px 0; }
-.sign-panel .sp-close {
-  align-self: flex-end;
-  font-size: 0.7rem;
-  color: var(--text-dim);
-  cursor: pointer;
-  padding: 2px 6px;
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  font-family: 'Cinzel', serif;
-}
-.sign-panel .sp-close:hover { color: var(--text); }
-
-/* ─── Degree Adjust Hint (mobile) ───────────────── */
 .deg-hint {
   font-size: 0.7rem;
   color: var(--text-muted);
@@ -492,33 +381,240 @@ select#lang {
   font-style: italic;
 }
 
-/* ─── Overlay for panels on mobile ──────────────── */
-.overlay {
+/* Yoga Cards */
+.yogas-panel {
+  display: none;
+  flex-direction: column;
+  gap: 6px;
+}
+.yogas-panel.visible { display: flex; }
+.yoga-card {
+  background: var(--card2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 12px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  animation: fadeIn 0.25s ease;
+}
+@keyframes fadeIn { from { opacity: 0; transform: translateY(3px); } to { opacity: 1; transform: none; } }
+.yoga-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+.yoga-name {
+  font-family: 'Cinzel', serif;
+  font-size: 0.72rem;
+  color: var(--gold);
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+.yoga-desc { font-size: 0.78rem; color: var(--text-dim); line-height: 1.4; }
+.yoga-empty {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-align: center;
+  padding: 10px;
+  font-style: italic;
+}
+
+/* AI Prompt Panel */
+.prompt-panel {
+  display: none;
+  flex-direction: column;
+  gap: 10px;
+}
+.prompt-panel.visible { display: flex; }
+
+.prompt-output {
+  background: var(--card2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 0.78rem;
+  line-height: 1.65;
+  color: var(--text);
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 300px;
+  overflow-y: auto;
+  font-family: 'Crimson Pro', serif;
+}
+.prompt-output:empty::before {
+  content: 'Place Lagna and planets in the chart to generate a prompt…';
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.copy-toast {
   position: fixed;
-  inset: 0;
-  z-index: 4999;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(60px);
+  background: rgba(39,174,96,0.95);
+  color: #fff;
+  font-family: 'Cinzel', serif;
+  font-size: 0.76rem;
+  letter-spacing: 0.08em;
+  padding: 9px 20px;
+  border-radius: 24px;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.2);
+  z-index: 9999;
+  transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s;
+  opacity: 0;
+  pointer-events: none;
+}
+.copy-toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+/* Tabs */
+.tab-row {
+  display: flex;
+  gap: 0;
+  background: var(--card2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.tab-btn {
+  flex: 1;
+  padding: 8px 6px;
+  font-family: 'Cinzel', serif;
+  font-size: 0.67rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-transform: uppercase;
+  border-right: 1px solid var(--border);
+}
+.tab-btn:last-child { border-right: none; }
+.tab-btn.active { background: var(--surface); color: var(--gold); }
+.tab-btn:hover:not(.active) { background: rgba(139,105,20,0.05); color: var(--text-dim); }
+
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* Floating Tooltip */
+.tooltip {
+  position: fixed;
+  background: rgba(255,252,245,0.98);
+  border: 1px solid var(--border-bright);
+  border-radius: 8px;
+  padding: 10px 13px;
+  font-size: 0.8rem;
+  line-height: 1.6;
+  color: var(--text);
+  z-index: 5000;
+  pointer-events: none;
+  max-width: 270px;
+  box-shadow: 0 6px 24px rgba(139,105,20,0.18);
+  backdrop-filter: blur(4px);
   display: none;
 }
+.tooltip.visible { display: block; }
+.tooltip strong { color: var(--gold); font-family: 'Cinzel', serif; font-size: 0.76rem; }
+.tooltip hr { border: none; border-top: 1px solid var(--border); margin: 5px 0; }
+.tooltip .trow { display: block; margin-bottom: 1px; }
+.tooltip .trow span { color: var(--text-muted); }
+
+/* Retrograde Panel */
+.retro-panel {
+  position: fixed;
+  background: rgba(255,252,245,0.99);
+  border: 1px solid var(--gold-dim);
+  border-radius: 10px;
+  padding: 14px;
+  z-index: 5000;
+  box-shadow: 0 6px 28px rgba(139,105,20,0.2);
+  display: none;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 185px;
+}
+.retro-panel.visible { display: flex; }
+.retro-panel-title { font-family: 'Cinzel', serif; font-size: 0.76rem; color: var(--gold); font-weight: 700; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
+.retro-panel label { display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 0.85rem; color: var(--text); }
+.retro-panel input[type=checkbox] { width: 17px; height: 17px; accent-color: var(--gold); cursor: pointer; }
+
+.deg-input-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.82rem;
+  color: var(--text-dim);
+}
+.deg-input-row input[type=number] {
+  width: 68px;
+  background: var(--card2);
+  border: 1px solid var(--border-bright);
+  border-radius: 5px;
+  color: var(--text);
+  padding: 4px 8px;
+  font-family: 'Crimson Pro', serif;
+  font-size: 0.88rem;
+  outline: none;
+}
+.deg-input-row input[type=number]:focus { border-color: var(--gold-dim); }
+
+.retro-panel-close { align-self: flex-end; font-size: 0.68rem; color: var(--text-muted); cursor: pointer; padding: 2px 8px; border: 1px solid var(--border); border-radius: 4px; font-family: 'Cinzel', serif; }
+.retro-panel-close:hover { color: var(--text); }
+
+/* Sign Panel */
+.sign-panel {
+  position: fixed;
+  background: rgba(255,252,245,0.99);
+  border: 1px solid var(--border-bright);
+  border-radius: 10px;
+  padding: 12px 14px;
+  z-index: 5000;
+  box-shadow: 0 6px 24px rgba(139,105,20,0.15);
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  max-width: 255px;
+  font-size: 0.8rem;
+  line-height: 1.55;
+}
+.sign-panel.visible { display: flex; }
+.sign-panel strong { color: var(--gold); font-family: 'Cinzel', serif; font-size: 0.76rem; }
+.sign-panel hr { border: none; border-top: 1px solid var(--border); margin: 4px 0; }
+.sign-panel .sp-close { align-self: flex-end; font-size: 0.68rem; color: var(--text-muted); cursor: pointer; padding: 2px 8px; border: 1px solid var(--border); border-radius: 4px; font-family: 'Cinzel', serif; }
+.sign-panel .sp-close:hover { color: var(--text); }
+
+.overlay { position: fixed; inset: 0; z-index: 4999; display: none; }
 .overlay.visible { display: block; }
+
+/* Aspects */
+.aspect-entry {
+  margin-bottom: 6px;
+  padding: 7px 10px;
+  background: var(--card2);
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.78rem;
+}
 
 @media (max-width: 480px) {
   body { padding: 10px; }
-  .chart-grid { grid-template-rows: repeat(4, minmax(70px, 1fr)); }
-  .cell { min-height: 70px; }
-  .planet { font-size: 0.62rem; padding: 2px 5px; min-width: 30px; }
-  .planet-bank .planet { font-size: 0.72rem; padding: 5px 9px; }
-  .sign-abbr { font-size: 0.55rem; }
-  .house-num { font-size: 0.55rem; }
+  .chart-grid { grid-template-rows: repeat(4, minmax(68px, 1fr)); }
+  .cell { min-height: 68px; }
+  .planet { font-size: 0.6rem; padding: 2px 5px; min-width: 28px; }
+  .planet-bank .planet { font-size: 0.7rem; padding: 4px 9px; }
+  .sign-abbr { font-size: 0.54rem; }
+  .house-num { font-size: 0.54rem; }
+  .tab-btn { font-size: 0.59rem; padding: 7px 3px; }
 }
 </style>
 </head>
 <body>
 
-<!-- Drag ghost -->
 <div id="drag-ghost"></div>
-
-<!-- Overlay (closes panels on mobile tap-outside) -->
 <div class="overlay" id="overlay"></div>
+<div class="copy-toast" id="copyToast">✓ Copied to clipboard!</div>
 
 <div class="app-header">
   <div class="app-title" id="appTitle">South Indian Vedic Astrology Chart</div>
@@ -563,9 +659,10 @@ select#lang {
         <span class="house-num"></span>
         <div class="planets-area" data-sign="Aquarius"></div>
       </div>
-      <div class="cell-center">
+      <div class="cell-center" id="centerCell">
         <span class="center-line" id="centerLine1">South Indian</span>
         <span class="center-line" id="centerLine2">Chart</span>
+        <div id="yogaBadgeArea"></div>
       </div>
       <div class="cell" data-sign="Cancer">
         <span class="sign-abbr" data-sign="Cancer">Cn</span>
@@ -620,28 +717,71 @@ select#lang {
       <span class="planet Rahu"    data-pid="Rahu">Ra</span>
       <span class="planet Ketu"    data-pid="Ketu">Ke</span>
     </div>
-    <div class="tip-box" id="bankTip">Drag planets from here into a chart sign box. Double-tap a placed planet to return it here.</div>
+    <div class="tip-box" id="bankTip">Drag planets from here into a chart sign box. Double-tap a placed planet to return it here. Tap once to set retrograde &amp; exact degree.</div>
 
     <div class="btn-row">
       <button class="btn" id="btnSigns">Hide Signs</button>
       <button class="btn" id="btnNums">Hide Numbers</button>
       <button class="btn danger" id="btnClear">Clear Chart</button>
     </div>
-    <div class="deg-hint" id="degHint">Tap a placed planet to toggle retrograde · Slide up/down to change degree</div>
+    <div class="deg-hint" id="degHint">Tap placed planet → set exact degree &amp; retrograde</div>
+  </div>
+
+  <!-- Bottom Panels: Tabs -->
+  <div class="panel">
+    <div class="tab-row">
+      <button class="tab-btn active" data-tab="yogas" id="tabYogas">⚡ Yogas</button>
+      <button class="tab-btn" data-tab="prompt" id="tabPrompt">🤖 AI Prompt</button>
+      <button class="tab-btn" data-tab="aspects" id="tabAspects">🔭 Aspects</button>
+    </div>
+
+    <!-- Tab: Yogas -->
+    <div class="tab-content active" id="tab-yogas" style="margin-top:12px">
+      <div class="yogas-panel visible" id="yogasPanel">
+        <div class="yoga-empty" id="yogaEmpty">Place planets in the chart to detect yogas</div>
+      </div>
+    </div>
+
+    <!-- Tab: AI Prompt -->
+    <div class="tab-content" id="tab-prompt" style="margin-top:12px">
+      <div class="prompt-panel visible" id="promptPanel">
+        <div style="font-size:0.78rem;color:var(--text-dim);line-height:1.5;font-style:italic" id="promptIntro">
+          Generate a ready-to-paste prompt for any AI (ChatGPT, Claude, Gemini…) to get a Vedic reading.
+        </div>
+        <div class="prompt-output" id="promptOutput"></div>
+        <div class="btn-row">
+          <button class="btn" id="btnGenPrompt">✨ Generate Prompt</button>
+          <button class="btn" id="btnCopyPrompt">📋 Copy</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab: Aspects -->
+    <div class="tab-content" id="tab-aspects" style="margin-top:12px">
+      <div id="aspectsPanel" style="font-size:0.8rem;line-height:1.6;color:var(--text-dim)">
+        <div class="yoga-empty">Place planets in the chart to see special aspects (drishti)</div>
+      </div>
+    </div>
+
   </div>
 
 </div>
 
-<!-- Floating Tooltip (desktop hover) -->
+<!-- Floating Tooltip -->
 <div class="tooltip" id="tooltip"></div>
 
-<!-- Retrograde panel -->
+<!-- Retrograde + Degree panel -->
 <div class="retro-panel" id="retroPanel">
   <div class="retro-panel-title" id="retroTitle">Planet</div>
   <label>
     <input type="checkbox" id="retroCheck">
     <span id="retroLabel">Retrograde</span>
   </label>
+  <div class="deg-input-row">
+    <span>Degree:</span>
+    <input type="number" id="degInput" min="0" max="29.99" step="0.1" value="0">
+    <span>°</span>
+  </div>
   <span class="retro-panel-close" id="retroClose">Close</span>
 </div>
 
@@ -659,33 +799,33 @@ const SIGNS = ["Aries","Taurus","Gemini","Cancer","Leo","Virgo","Libra","Scorpio
 const ALL_PIDS = ['Lagna','Sun','Moon','Mars','Mercury','Jupiter','Venus','Saturn','Rahu','Ketu'];
 
 const NAKSH = [
-  {name:'Ashwini',kw:'Speed, Healing, Initiative'},
-  {name:'Bharani',kw:'Transformation, Patience, Sacrifice'},
-  {name:'Krittika',kw:'Purification, Leadership, Protection'},
-  {name:'Rohini',kw:'Growth, Fertility, Creativity'},
-  {name:'Mrigashira',kw:'Curiosity, Searching, Wandering'},
-  {name:'Ardra',kw:'Transformation, Intensity, Renewal'},
-  {name:'Punarvasu',kw:'Renewal, Nourishment, Return'},
-  {name:'Pushya',kw:'Nourishment, Protection, Spirituality'},
-  {name:'Ashlesha',kw:'Intuition, Hypnotic, Mysticism'},
-  {name:'Magha',kw:'Authority, Ancestors, Legacy'},
-  {name:'Purva Phalguni',kw:'Enjoyment, Luxury, Romance'},
-  {name:'Uttara Phalguni',kw:'Support, Union, Philanthropy'},
-  {name:'Hasta',kw:'Skill, Dexterity, Craftsmanship'},
-  {name:'Chitra',kw:'Artistry, Beauty, Architecture'},
-  {name:'Swati',kw:'Independence, Movement, Adaptability'},
-  {name:'Vishakha',kw:'Purpose, Determination, Achievement'},
-  {name:'Anuradha',kw:'Devotion, Friendship, Success'},
-  {name:'Jyeshtha',kw:'Seniority, Protection, Power'},
-  {name:'Moola',kw:'Foundation, Destruction, Research'},
-  {name:'Purva Ashadha',kw:'Invincibility, Persistence, Water'},
-  {name:'Uttara Ashadha',kw:'Victory, Dharma, Leadership'},
-  {name:'Shravana',kw:'Listening, Learning, Wisdom'},
-  {name:'Dhanishta',kw:'Wealth, Rhythm, Celebration'},
-  {name:'Shatabhisha',kw:'Healing, Mysticism, Hidden Knowledge'},
-  {name:'Purva Bhadrapada',kw:'Transformation, Spiritual Fire'},
-  {name:'Uttara Bhadrapada',kw:'Stability, Prosperity, Universal Love'},
-  {name:'Revati',kw:'Nourishment, Protection, Completion'}
+  {name:'Ashwini',   lord:'Ketu',    kw:'Speed, Healing, Initiative'},
+  {name:'Bharani',   lord:'Venus',   kw:'Transformation, Patience, Sacrifice'},
+  {name:'Krittika',  lord:'Sun',     kw:'Purification, Leadership, Protection'},
+  {name:'Rohini',    lord:'Moon',    kw:'Growth, Fertility, Creativity'},
+  {name:'Mrigashira',lord:'Mars',    kw:'Curiosity, Searching, Wandering'},
+  {name:'Ardra',     lord:'Rahu',    kw:'Transformation, Intensity, Renewal'},
+  {name:'Punarvasu', lord:'Jupiter', kw:'Renewal, Nourishment, Return'},
+  {name:'Pushya',    lord:'Saturn',  kw:'Nourishment, Protection, Spirituality'},
+  {name:'Ashlesha',  lord:'Mercury', kw:'Intuition, Hypnotic, Mysticism'},
+  {name:'Magha',     lord:'Ketu',    kw:'Authority, Ancestors, Legacy'},
+  {name:'Purva Phalguni',  lord:'Venus',   kw:'Enjoyment, Luxury, Romance'},
+  {name:'Uttara Phalguni', lord:'Sun',     kw:'Support, Union, Philanthropy'},
+  {name:'Hasta',     lord:'Moon',    kw:'Skill, Dexterity, Craftsmanship'},
+  {name:'Chitra',    lord:'Mars',    kw:'Artistry, Beauty, Architecture'},
+  {name:'Swati',     lord:'Rahu',    kw:'Independence, Movement, Adaptability'},
+  {name:'Vishakha',  lord:'Jupiter', kw:'Purpose, Determination, Achievement'},
+  {name:'Anuradha',  lord:'Saturn',  kw:'Devotion, Friendship, Success'},
+  {name:'Jyeshtha',  lord:'Mercury', kw:'Seniority, Protection, Power'},
+  {name:'Moola',     lord:'Ketu',    kw:'Foundation, Destruction, Research'},
+  {name:'Purva Ashadha',   lord:'Venus',   kw:'Invincibility, Persistence, Water'},
+  {name:'Uttara Ashadha',  lord:'Sun',     kw:'Victory, Dharma, Leadership'},
+  {name:'Shravana',  lord:'Moon',    kw:'Listening, Learning, Wisdom'},
+  {name:'Dhanishta', lord:'Mars',    kw:'Wealth, Rhythm, Celebration'},
+  {name:'Shatabhisha',lord:'Rahu',   kw:'Healing, Mysticism, Hidden Knowledge'},
+  {name:'Purva Bhadrapada',lord:'Jupiter', kw:'Transformation, Spiritual Fire'},
+  {name:'Uttara Bhadrapada',lord:'Saturn', kw:'Stability, Prosperity, Universal Love'},
+  {name:'Revati',    lord:'Mercury', kw:'Nourishment, Protection, Completion'}
 ];
 
 const PLANET_RULES = {
@@ -695,19 +835,30 @@ const PLANET_RULES = {
   Rahu:['Aquarius'], Ketu:['Scorpio']
 };
 
+const EXALTATION = {
+  Sun:'Aries', Moon:'Taurus', Mars:'Capricorn',
+  Mercury:'Virgo', Jupiter:'Cancer', Venus:'Pisces',
+  Saturn:'Libra', Rahu:'Taurus', Ketu:'Scorpio'
+};
+const DEBILITATION = {
+  Sun:'Libra', Moon:'Scorpio', Mars:'Cancer',
+  Mercury:'Pisces', Jupiter:'Capricorn', Venus:'Virgo',
+  Saturn:'Aries', Rahu:'Scorpio', Ketu:'Taurus'
+};
+
 const SIGN_DATA = {
-  Aries:      {kw:'Initiation, Action, Energy',               ruler:'Mars',         el:'Fire',  mod:'Cardinal'},
-  Taurus:     {kw:'Stability, Sensuality, Comfort',           ruler:'Venus',        el:'Earth', mod:'Fixed'},
-  Gemini:     {kw:'Communication, Intellect, Versatility',    ruler:'Mercury',      el:'Air',   mod:'Dual'},
-  Cancer:     {kw:'Nurturing, Emotion, Home',                 ruler:'Moon',         el:'Water', mod:'Cardinal'},
-  Leo:        {kw:'Creativity, Leadership, Royalty',          ruler:'Sun',          el:'Fire',  mod:'Fixed'},
-  Virgo:      {kw:'Service, Analysis, Health',                ruler:'Mercury',      el:'Earth', mod:'Dual'},
-  Libra:      {kw:'Harmony, Relationships, Justice',          ruler:'Venus',        el:'Air',   mod:'Cardinal'},
-  Scorpio:    {kw:'Transformation, Secrecy, Intensity',       ruler:'Mars, Ketu',   el:'Water', mod:'Fixed'},
-  Sagittarius:{kw:'Philosophy, Exploration, Wisdom',          ruler:'Jupiter',      el:'Fire',  mod:'Dual'},
-  Capricorn:  {kw:'Discipline, Ambition, Structure',          ruler:'Saturn',       el:'Earth', mod:'Cardinal'},
-  Aquarius:   {kw:'Innovation, Humanitarianism',              ruler:'Saturn, Rahu', el:'Air',   mod:'Fixed'},
-  Pisces:     {kw:'Imagination, Spirituality, Compassion',    ruler:'Jupiter, Ketu',el:'Water', mod:'Dual'}
+  Aries:      {kw:'Initiation, Action, Energy',               ruler:'Mars',         el:'Fire',  mod:'Cardinal', symbol:'♈'},
+  Taurus:     {kw:'Stability, Sensuality, Comfort',           ruler:'Venus',        el:'Earth', mod:'Fixed',    symbol:'♉'},
+  Gemini:     {kw:'Communication, Intellect, Versatility',    ruler:'Mercury',      el:'Air',   mod:'Dual',     symbol:'♊'},
+  Cancer:     {kw:'Nurturing, Emotion, Home',                 ruler:'Moon',         el:'Water', mod:'Cardinal', symbol:'♋'},
+  Leo:        {kw:'Creativity, Leadership, Royalty',          ruler:'Sun',          el:'Fire',  mod:'Fixed',    symbol:'♌'},
+  Virgo:      {kw:'Service, Analysis, Health',                ruler:'Mercury',      el:'Earth', mod:'Dual',     symbol:'♍'},
+  Libra:      {kw:'Harmony, Relationships, Justice',          ruler:'Venus',        el:'Air',   mod:'Cardinal', symbol:'♎'},
+  Scorpio:    {kw:'Transformation, Secrecy, Intensity',       ruler:'Mars, Ketu',   el:'Water', mod:'Fixed',    symbol:'♏'},
+  Sagittarius:{kw:'Philosophy, Exploration, Wisdom',          ruler:'Jupiter',      el:'Fire',  mod:'Dual',     symbol:'♐'},
+  Capricorn:  {kw:'Discipline, Ambition, Structure',          ruler:'Saturn',       el:'Earth', mod:'Cardinal', symbol:'♑'},
+  Aquarius:   {kw:'Innovation, Humanitarianism',              ruler:'Saturn, Rahu', el:'Air',   mod:'Fixed',    symbol:'♒'},
+  Pisces:     {kw:'Imagination, Spirituality, Compassion',    ruler:'Jupiter, Ketu',el:'Water', mod:'Dual',     symbol:'♓'}
 };
 
 const HOUSE_KW = {
@@ -725,13 +876,110 @@ const HOUSE_KW = {
   12:'Losses, Expenses, Moksha, Foreign Lands'
 };
 
+const SPECIAL_ASPECTS = {
+  Mars:    [4, 7, 8],
+  Jupiter: [5, 7, 9],
+  Saturn:  [3, 7, 10],
+  Rahu:    [5, 7, 9],
+  Ketu:    [5, 7, 9]
+};
+
+const YOGA_DEFS = [
+  {
+    name:'Gaja Kesari Yoga', icon:'🐘',
+    desc:'Jupiter and Moon in mutual kendra (1,4,7,10). Brings wisdom, fame, and prosperity.',
+    check: (pd, ls) => {
+      if (!ls || !pd['Jupiter'] || !pd['Moon']) return false;
+      const jH = houseNum(pd['Jupiter'].sign, ls), mH = houseNum(pd['Moon'].sign, ls);
+      return [0,3,6,9].includes(Math.abs(jH - mH));
+    }
+  },
+  {
+    name:'Budha-Aditya Yoga', icon:'☀️',
+    desc:'Sun and Mercury conjunct. Enhances intelligence, communication, and fame.',
+    check: (pd) => pd['Sun'] && pd['Mercury'] && pd['Sun'].sign === pd['Mercury'].sign
+  },
+  {
+    name:'Chandra-Mangal Yoga', icon:'🌙',
+    desc:'Moon and Mars conjunct. Strong willpower, financial acumen, emotional courage.',
+    check: (pd) => pd['Moon'] && pd['Mars'] && pd['Moon'].sign === pd['Mars'].sign
+  },
+  {
+    name:'Lakshmi Yoga', icon:'🪷',
+    desc:'Venus in kendra/trikona in own sign or exaltation. Wealth and grace.',
+    check: (pd, ls) => {
+      if (!ls || !pd['Venus']) return false;
+      const vH = houseNum(pd['Venus'].sign, ls);
+      const exalt = EXALTATION['Venus'] === pd['Venus'].sign;
+      const own = (PLANET_RULES['Venus']||[]).includes(pd['Venus'].sign);
+      return [1,4,5,7,9,10].includes(vH) && (exalt || own);
+    }
+  },
+  {
+    name:'Hamsa Yoga', icon:'🕊️',
+    desc:'Jupiter in own sign or exaltation in a kendra. Pure soul and dharmic path.',
+    check: (pd, ls) => {
+      if (!ls || !pd['Jupiter']) return false;
+      const jH = houseNum(pd['Jupiter'].sign, ls);
+      const exalt = EXALTATION['Jupiter'] === pd['Jupiter'].sign;
+      const own = (PLANET_RULES['Jupiter']||[]).includes(pd['Jupiter'].sign);
+      return [1,4,7,10].includes(jH) && (exalt || own);
+    }
+  },
+  {
+    name:'Malavya Yoga', icon:'💎',
+    desc:'Venus in own sign or exaltation in a kendra. Luxury and artistic talent.',
+    check: (pd, ls) => {
+      if (!ls || !pd['Venus']) return false;
+      const vH = houseNum(pd['Venus'].sign, ls);
+      const exalt = EXALTATION['Venus'] === pd['Venus'].sign;
+      const own = (PLANET_RULES['Venus']||[]).includes(pd['Venus'].sign);
+      return [1,4,7,10].includes(vH) && (exalt || own);
+    }
+  },
+  {
+    name:'Sasa Yoga', icon:'🪐',
+    desc:'Saturn in own sign or exaltation in a kendra. Discipline and longevity.',
+    check: (pd, ls) => {
+      if (!ls || !pd['Saturn']) return false;
+      const sH = houseNum(pd['Saturn'].sign, ls);
+      const exalt = EXALTATION['Saturn'] === pd['Saturn'].sign;
+      const own = (PLANET_RULES['Saturn']||[]).includes(pd['Saturn'].sign);
+      return [1,4,7,10].includes(sH) && (exalt || own);
+    }
+  },
+  {
+    name:'Ruchaka Yoga', icon:'⚔️',
+    desc:'Mars in own sign or exaltation in a kendra. Courage and physical authority.',
+    check: (pd, ls) => {
+      if (!ls || !pd['Mars']) return false;
+      const mH = houseNum(pd['Mars'].sign, ls);
+      const exalt = EXALTATION['Mars'] === pd['Mars'].sign;
+      const own = (PLANET_RULES['Mars']||[]).includes(pd['Mars'].sign);
+      return [1,4,7,10].includes(mH) && (exalt || own);
+    }
+  },
+  {
+    name:'Kemadruma Yoga', icon:'⚠️',
+    desc:'Moon isolated — no planets in 2nd or 12th from it. Challenges and hardship.',
+    check: (pd) => {
+      if (!pd['Moon']) return false;
+      const moonIdx = SIGNS.indexOf(pd['Moon'].sign);
+      const prev = SIGNS[(moonIdx - 1 + 12) % 12];
+      const next = SIGNS[(moonIdx + 1) % 12];
+      const pids = ['Sun','Mars','Mercury','Jupiter','Venus','Saturn'];
+      return !pids.some(p => pd[p] && (pd[p].sign === prev || pd[p].sign === next || pd[p].sign === pd['Moon'].sign));
+    }
+  }
+];
+
 const TRANS = {
   en: {
     title:'South Indian Vedic Astrology Chart',
     subtitle:'Interactive • Drag planets into signs',
     bankTitle:'Planet Bank — Drag into chart',
-    bankTip:'Drag a planet into a sign. Tap a placed planet to set retrograde. Double-tap to return it here.',
-    degHint:'Slide a placed planet up/down to adjust degree',
+    bankTip:'Drag a planet into a sign. Tap once to set degree & retrograde. Double-tap to return to bank.',
+    degHint:'Tap placed planet → set exact degree & retrograde',
     hideSigns:'Hide Signs', showSigns:'Show Signs',
     hideNums:'Hide Numbers', showNums:'Show Numbers',
     clearChart:'Clear Chart',
@@ -742,6 +990,7 @@ const TRANS = {
     lordOf:'Lord of', houseLord:'House Lordship',
     noLagna:'(Place Lagna to see house info)',
     center1:'South Indian', center2:'Chart',
+    exalted:'Exalted', debilitated:'Debil.', ownSign:'Own',
     pnames:{Lagna:'Lagna',Sun:'Sun',Moon:'Moon',Mars:'Mars',Mercury:'Mercury',Jupiter:'Jupiter',Venus:'Venus',Saturn:'Saturn',Rahu:'Rahu',Ketu:'Ketu'},
     psym:{Lagna:'L',Sun:'Su',Moon:'Mo',Mars:'Ma',Mercury:'Me',Jupiter:'Ju',Venus:'Ve',Saturn:'Sa',Rahu:'Ra',Ketu:'Ke'},
     snames:{Aries:'Aries',Taurus:'Taurus',Gemini:'Gemini',Cancer:'Cancer',Leo:'Leo',Virgo:'Virgo',Libra:'Libra',Scorpio:'Scorpio',Sagittarius:'Sagittarius',Capricorn:'Capricorn',Aquarius:'Aquarius',Pisces:'Pisces'},
@@ -752,8 +1001,8 @@ const TRANS = {
     title:'దక్షిణ భారతీయ వేద జ్యోతిష్య చార్ట్',
     subtitle:'ఇంటరాక్టివ్ • గ్రహాలను రాశులలో ఉంచండి',
     bankTitle:'గ్రహ బ్యాంక్ — చార్ట్‌లోకి లాగండి',
-    bankTip:'గ్రహాన్ని రాశిలోకి లాగండి. వక్రి సెట్ చేయడానికి నొక్కండి. తిరిగి రావడానికి రెండుసార్లు నొక్కండి.',
-    degHint:'డిగ్రీ మార్చడానికి గ్రహాన్ని పైకి/క్రిందికి స్లైడ్ చేయండి',
+    bankTip:'గ్రహాన్ని రాశిలోకి లాగండి. నొక్కండి డిగ్రీ/వక్రి సెట్ చేయడానికి. రెండుసార్లు నొక్కి తిరిగి పంపండి.',
+    degHint:'గ్రహాన్ని నొక్కి డిగ్రీ & వక్రి సెట్ చేయండి',
     hideSigns:'రాశులను దాచు', showSigns:'రాశులను చూపు',
     hideNums:'నంబర్లను దాచు', showNums:'నంబర్లను చూపు',
     clearChart:'చార్ట్ క్లియర్',
@@ -764,6 +1013,7 @@ const TRANS = {
     lordOf:'అధిపతి', houseLord:'ఇంటి ఆధిపత్యం',
     noLagna:'(ఇంటి సమాచారం చూడటానికి లగ్నాని ఉంచండి)',
     center1:'దక్షిణ భారతీయ', center2:'చార్ట్',
+    exalted:'ఉచ్చ', debilitated:'నీచ', ownSign:'స్వ',
     pnames:{Lagna:'లగ్న',Sun:'సూర్యుడు',Moon:'చంద్రుడు',Mars:'కుజుడు',Mercury:'బుధుడు',Jupiter:'గురుడు',Venus:'శుక్రుడు',Saturn:'శని',Rahu:'రాహువు',Ketu:'కేతువు'},
     psym:{Lagna:'ల',Sun:'సూ',Moon:'చం',Mars:'కు',Mercury:'బు',Jupiter:'గు',Venus:'శు',Saturn:'శ',Rahu:'రా',Ketu:'కే'},
     snames:{Aries:'మేషం',Taurus:'వృషభం',Gemini:'మిథునం',Cancer:'కర్కాటకం',Leo:'సింహం',Virgo:'కన్య',Libra:'తుల',Scorpio:'వృశ్చికం',Sagittarius:'ధనుస్సు',Capricorn:'మకరం',Aquarius:'కుంభం',Pisces:'మీనం'},
@@ -772,31 +1022,32 @@ const TRANS = {
   }
 };
 
-/* ─── State ───────────────────────────────────── */
+/* ─── State ─────────────────────────────────── */
 let lang = 'en';
 let lagnaSign = null;
 let signsHidden = false;
 let numsHidden = false;
-let planetData = {};       // pid -> {sign, degree, retro}
+let planetData = {};
 let activePlanetForRetro = null;
 let dragState = null;
-let lastDragEndTime = 0;   // FIX #4: suppress click after drag
+let lastDragEndTime = 0;
 
-/* ─── Helpers ─────────────────────────────────── */
+/* ─── Helpers ───────────────────────────────── */
 const T = () => TRANS[lang];
 function getEl(sel) { return document.querySelector(sel); }
 function getAll(sel) { return document.querySelectorAll(sel); }
 
-function houseNum(sign) {
-  if (!lagnaSign) return null;
-  const a = SIGNS.indexOf(lagnaSign);
+function houseNum(sign, ls) {
+  const lagna = ls !== undefined ? ls : lagnaSign;
+  if (!lagna) return null;
+  const a = SIGNS.indexOf(lagna);
   const s = SIGNS.indexOf(sign);
   return (s - a + 12) % 12 + 1;
 }
 
 function getNakshatra(sign, deg) {
   const si = SIGNS.indexOf(sign);
-  if (si < 0) return {name:'?', kw:'', pada:1};
+  if (si < 0) return {name:'?', kw:'', pada:1, lord:'?'};
   const total = si * 30 + deg;
   const nLen = 360 / 27;
   let ni = Math.floor(total / nLen);
@@ -806,7 +1057,15 @@ function getNakshatra(sign, deg) {
   return {...NAKSH[ni], pada};
 }
 
-/* ─── Build / Refresh Planet Element ─────────── */
+function getStrength(pid, sign) {
+  if (!pid || pid === 'Lagna') return null;
+  if (EXALTATION[pid] === sign) return 'exalted';
+  if (DEBILITATION[pid] === sign) return 'debilitated';
+  if ((PLANET_RULES[pid] || []).includes(sign)) return 'own';
+  return null;
+}
+
+/* ─── Build Planet Element ──────────────────── */
 function buildPlanet(pid) {
   const el = document.createElement('span');
   el.className = `planet ${pid}`;
@@ -832,23 +1091,18 @@ function refreshAllPlanets() {
   document.querySelectorAll('.planet').forEach(el => refreshPlanetContent(el));
 }
 
-/* ─── Bank: rebuild from scratch respecting language ── */
 function rebuildBank() {
   const bank = getEl('#planetBank');
-  // Only add planets not already in the chart
   const inChart = new Set(
     [...document.querySelectorAll('.planets-area .planet')].map(el => el.dataset.pid)
   );
-  // Remove all current bank planets first
   [...bank.querySelectorAll('.planet')].forEach(el => el.remove());
   ALL_PIDS.forEach(pid => {
-    if (!inChart.has(pid)) {
-      bank.appendChild(buildPlanet(pid));
-    }
+    if (!inChart.has(pid)) bank.appendChild(buildPlanet(pid));
   });
 }
 
-/* ─── House Numbers ──────────────────────────── */
+/* ─── House Numbers ─────────────────────────── */
 function updateHouseNums() {
   getAll('.cell[data-sign]').forEach(cell => {
     const hn = cell.querySelector('.house-num');
@@ -867,7 +1121,128 @@ function updateSignLabels() {
   });
 }
 
-/* ─── Language UI ─────────────────────────────── */
+/* ─── Yoga Detection ────────────────────────── */
+function detectYogas() {
+  const panel = getEl('#yogasPanel');
+  panel.innerHTML = '';
+  const detected = YOGA_DEFS.filter(y => y.check(planetData, lagnaSign));
+
+  if (detected.length === 0) {
+    panel.innerHTML = `<div class="yoga-empty">No yogas detected yet. Place more planets in the chart.</div>`;
+    getEl('#yogaBadgeArea').innerHTML = '';
+    return;
+  }
+
+  detected.forEach(y => {
+    const card = document.createElement('div');
+    card.className = 'yoga-card';
+    card.innerHTML = `<div class="yoga-icon">${y.icon}</div>
+      <div>
+        <div class="yoga-name">${y.name}</div>
+        <div class="yoga-desc">${y.desc}</div>
+      </div>`;
+    panel.appendChild(card);
+  });
+
+  const area = getEl('#yogaBadgeArea');
+  area.innerHTML = `<div class="yoga-badge detected">${detected.length} Yoga${detected.length>1?'s':''}</div>`;
+}
+
+/* ─── Aspects Detection ─────────────────────── */
+function updateAspects() {
+  const panel = getEl('#aspectsPanel');
+  const placed = ALL_PIDS.filter(p => p !== 'Lagna' && planetData[p]);
+  if (!lagnaSign || placed.length < 2) {
+    panel.innerHTML = `<div class="yoga-empty">Place Lagna and planets to see special aspects (drishti)</div>`;
+    return;
+  }
+
+  let html = `<div style="font-family:'Cinzel',serif;font-size:0.7rem;color:var(--text-muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px">Special Aspects (Drishti)</div>`;
+  const t = T();
+  let anyFound = false;
+
+  placed.forEach(pid => {
+    if (!SPECIAL_ASPECTS[pid]) return;
+    const d = planetData[pid];
+    const fromH = houseNum(d.sign);
+    if (!fromH) return;
+
+    const aspectedHouses = SPECIAL_ASPECTS[pid].map(rel => ((fromH - 1 + rel - 1) % 12) + 1);
+    const aspectedSigns = SIGNS.filter(s => {
+      const h = houseNum(s);
+      return h && aspectedHouses.includes(h);
+    });
+
+    const aspectedPlanets = placed.filter(p2 => p2 !== pid && aspectedSigns.includes(planetData[p2]?.sign));
+
+    if (aspectedPlanets.length === 0 && aspectedSigns.length > 0) {
+      html += `<div class="aspect-entry">
+        <span style="color:var(--text-muted);font-family:'Cinzel',serif;font-size:0.7rem">${t.pnames[pid]}</span>
+        <span style="color:var(--text-muted)">aspects Houses ${aspectedHouses.join(', ')} (empty)</span>
+      </div>`;
+      anyFound = true;
+      return;
+    }
+
+    aspectedPlanets.forEach(p2 => {
+      const toH = houseNum(planetData[p2].sign);
+      html += `<div class="aspect-entry">
+        <span class="planet ${pid}" style="pointer-events:none;transform:none;box-shadow:none;font-size:0.62rem;padding:2px 6px">${t.psym[pid]}</span>
+        <span style="color:var(--accent);font-size:0.85rem">→</span>
+        <span class="planet ${p2}" style="pointer-events:none;transform:none;box-shadow:none;font-size:0.62rem;padding:2px 6px">${t.psym[p2]}</span>
+        <span style="color:var(--text-dim);font-size:0.76rem">${t.pnames[pid]} → ${t.pnames[p2]} in H${toH}</span>
+      </div>`;
+      anyFound = true;
+    });
+  });
+
+  if (!anyFound) html += `<div class="yoga-empty">No special aspects found between placed planets.</div>`;
+  panel.innerHTML = html;
+}
+
+/* ─── AI Prompt Generator ─────────────────────── */
+function generatePrompt() {
+  const t = T();
+  const placed = ALL_PIDS.filter(p => planetData[p]);
+  if (placed.length === 0) { getEl('#promptOutput').textContent = ''; return; }
+
+  const lagnaInfo = planetData['Lagna'];
+  const lagnaText = lagnaInfo
+    ? `Lagna (Ascendant): ${lagnaInfo.sign} (${lagnaInfo.degree.toFixed(2)}°)`
+    : 'Lagna: Not placed';
+
+  const planetLines = [];
+  ALL_PIDS.filter(p => p !== 'Lagna' && planetData[p]).forEach(pid => {
+    const d = planetData[pid];
+    const nak = getNakshatra(d.sign, d.degree);
+    const hn = lagnaSign ? houseNum(d.sign) : null;
+    const strength = getStrength(pid, d.sign);
+    let line = `${t.pnames[pid]}: ${d.sign} at ${d.degree.toFixed(2)}° — ${nak.name} Nakshatra (Pada ${nak.pada}, Lord: ${nak.lord})`;
+    if (hn) line += `, ${t.hn[hn]}`;
+    if (strength) line += ` [${strength === 'exalted' ? 'EXALTED' : strength === 'debilitated' ? 'DEBILITATED' : 'Own Sign'}]`;
+    if (d.retro) line += ' ℞ (Retrograde)';
+    planetLines.push(line);
+  });
+
+  const detectedYogas = YOGA_DEFS.filter(y => y.check(planetData, lagnaSign)).map(y => y.name);
+
+  const prompt = `I have a South Indian Vedic (Jyotisha) natal chart with the following planetary positions. Please analyze this chart using classical Vedic astrology principles (Parashari system).
+
+═══ CHART DETAILS ═══
+${lagnaText}
+
+${planetLines.join('\n')}
+${detectedYogas.length > 0 ? `\nDetected Yogas: ${detectedYogas.join(', ')}` : ''}
+
+═══ READING REQUEST ═══
+Please provide a comprehensive Vedic astrology reading covering all major life areas: personality, health, career, finances, relationships, family, spirituality, and life purpose. Discuss the strength and effects of each planet, any special yogas or combinations, and major themes of this chart.
+
+Please use traditional Vedic astrology methods (not Western/Tropical). Consider planetary dignities, house lordships, conjunctions, and special aspects in your analysis.`;
+
+  getEl('#promptOutput').textContent = prompt;
+}
+
+/* ─── Language UI ───────────────────────────── */
 function applyLang() {
   const t = T();
   getEl('#appTitle').textContent    = t.title;
@@ -885,11 +1260,10 @@ function applyLang() {
   getEl('#btnClear').textContent    = t.clearChart;
   updateSignLabels();
   updateHouseNums();
-  // FIX #11: always refresh all planets (includes bank) on language change
   refreshAllPlanets();
 }
 
-/* ─── Tooltip (desktop hover) ────────────────── */
+/* ─── Tooltip ───────────────────────────────── */
 const tooltip = getEl('#tooltip');
 
 function showTooltip(pid, x, y) {
@@ -899,15 +1273,22 @@ function showTooltip(pid, x, y) {
   const nak = getNakshatra(d.sign, d.degree);
   const pname = t.pnames[pid] || pid;
   const signName = t.snames[d.sign] || d.sign;
+  const strength = getStrength(pid, d.sign);
 
   let html = `<strong>${pname}</strong>`;
   html += `<div class="trow">${d.degree.toFixed(2)}° ${signName}</div>`;
-  html += `<div class="trow"><span>${t.nakshatra}:</span> ${nak.name} (${nak.kw})</div>`;
+  html += `<div class="trow"><span>${t.nakshatra}:</span> ${nak.name} (Lord: ${nak.lord})</div>`;
+  html += `<div class="trow"><span>Keywords:</span> ${nak.kw}</div>`;
   html += `<div class="trow"><span>${t.pada}:</span> ${nak.pada}</div>`;
+  if (strength) {
+    const sc = strength === 'exalted' ? 'var(--green)' : strength === 'debilitated' ? 'var(--red)' : 'var(--gold)';
+    const sl = {exalted: t.exalted, debilitated: t.debilitated, own: t.ownSign};
+    html += `<div class="trow" style="color:${sc}">⬥ ${sl[strength]}</div>`;
+  }
   if (d.retro) html += `<div class="trow" style="color:var(--red)">(${t.retroLabel})</div>`;
 
   if (lagnaSign && PLANET_RULES[pid]) {
-    html += `<hr><div style="color:var(--gold-dim);font-family:'Cinzel',serif;font-size:0.72rem;margin-bottom:2px">${t.houseLord}</div>`;
+    html += `<hr><div style="color:var(--gold);font-family:'Cinzel',serif;font-size:0.7rem;margin-bottom:2px">${t.houseLord}</div>`;
     PLANET_RULES[pid].forEach(rs => {
       const hn = houseNum(rs);
       const hnName = t.hn[hn] || `H${hn}`;
@@ -923,9 +1304,7 @@ function showTooltip(pid, x, y) {
 
 function hideTooltip() { tooltip.classList.remove('visible'); }
 
-/* FIX #8: show panel FIRST, then position so offsetWidth/Height are real */
 function positionFloating(el, x, y) {
-  // Already visible before this call — measure real dims
   const w  = el.offsetWidth  || 200;
   const h  = el.offsetHeight || 100;
   const vw = window.innerWidth;
@@ -939,15 +1318,15 @@ function positionFloating(el, x, y) {
   el.style.top  = ly + 'px';
 }
 
-/* ─── Sign Panel ──────────────────────────────── */
+/* ─── Sign Panel ────────────────────────────── */
 const signPanel = getEl('#signPanel');
 
 function showSignPanel(sign, x, y) {
-  hideAllPanels(); // FIX #7: always close other panels first
+  hideAllPanels();
   const t = T();
   const sd = SIGN_DATA[sign];
   const hn = houseNum(sign);
-  getEl('#spSignName').textContent = t.snames[sign] || sign;
+  getEl('#spSignName').textContent = `${sd?.symbol || ''} ${t.snames[sign] || sign}`;
   let body = '';
   if (hn) {
     body += `<div><strong>${t.house}:</strong> ${t.hn[hn]}</div>`;
@@ -961,7 +1340,6 @@ function showSignPanel(sign, x, y) {
     body += `<div><strong>${t.ruler}:</strong> ${sd.ruler} &nbsp;|&nbsp; <strong>${t.element}:</strong> ${sd.el} &nbsp;|&nbsp; <strong>${t.modality}:</strong> ${sd.mod}</div>`;
   }
   getEl('#spBody').innerHTML = body;
-  // FIX #8: add visible class BEFORE positioning so offsetWidth is real
   signPanel.classList.add('visible');
   getEl('#overlay').classList.add('visible');
   positionFloating(signPanel, x, y);
@@ -969,18 +1347,19 @@ function showSignPanel(sign, x, y) {
 
 function hideSignPanel() { signPanel.classList.remove('visible'); }
 
-/* ─── Retrograde Panel ────────────────────────── */
+/* ─── Retrograde Panel ──────────────────────── */
 const retroPanel = getEl('#retroPanel');
 const retroCheck = getEl('#retroCheck');
 const retroTitle = getEl('#retroTitle');
+const degInput   = getEl('#degInput');
 
 function showRetroPanel(pid, x, y) {
-  hideAllPanels(); // FIX #7: close other panels first
+  hideAllPanels();
   activePlanetForRetro = pid;
   const t = T();
   retroTitle.textContent = t.pnames[pid] || pid;
   retroCheck.checked = !!(planetData[pid]?.retro);
-  // FIX #8: add visible BEFORE positioning
+  degInput.value = planetData[pid]?.degree?.toFixed(2) ?? '0';
   retroPanel.classList.add('visible');
   getEl('#overlay').classList.add('visible');
   positionFloating(retroPanel, x, y);
@@ -1003,132 +1382,102 @@ retroCheck.addEventListener('change', () => {
   planetData[activePlanetForRetro].retro = retroCheck.checked;
   const el = document.querySelector(`.planets-area .planet[data-pid="${activePlanetForRetro}"]`);
   if (el) refreshPlanetContent(el);
+  detectYogas();
+});
+
+degInput.addEventListener('input', () => {
+  if (!activePlanetForRetro || !planetData[activePlanetForRetro]) return;
+  let v = parseFloat(degInput.value);
+  if (isNaN(v)) return;
+  v = Math.max(0, Math.min(29.99, v));
+  planetData[activePlanetForRetro].degree = v;
+  const el = document.querySelector(`.planets-area .planet[data-pid="${activePlanetForRetro}"]`);
+  if (el) refreshPlanetContent(el);
+  detectYogas();
 });
 
 getEl('#retroClose').addEventListener('click', hideAllPanels);
 getEl('#spClose').addEventListener('click', hideAllPanels);
 getEl('#overlay').addEventListener('click', hideAllPanels);
 
-/* ─── Move planet into chart sign ─────────────── */
+/* ─── Move planet into chart sign ───────────── */
 function movePlanetToSign(pid, targetSign) {
-  // FIX #5: short-circuit if already in same sign (no needless rebuild)
-  if (planetData[pid] && planetData[pid].sign === targetSign) return;
-
-  // Remove existing element from wherever it is (chart or bank)
   const existing = document.querySelector(`.planet[data-pid="${pid}"]`);
   if (existing) existing.remove();
-
   if (pid === 'Lagna') lagnaSign = targetSign;
-
   const area = document.querySelector(`.planets-area[data-sign="${targetSign}"]`);
   if (!area) return;
-
   if (!planetData[pid]) {
-    // Brand new placement — assign random degree
-    planetData[pid] = {
-      sign: targetSign,
-      degree: parseFloat((Math.random() * 30).toFixed(2)),
-      retro: false
-    };
+    planetData[pid] = { sign: targetSign, degree: parseFloat((Math.random() * 30).toFixed(2)), retro: false };
   } else {
-    // Moving between signs — preserve degree and retro
     planetData[pid].sign = targetSign;
   }
-
   const el = buildPlanet(pid);
   area.appendChild(el);
   updateHouseNums();
+  detectYogas();
+  updateAspects();
 }
 
-/* ─── Return planet to bank ───────────────────── */
+/* ─── Return planet to bank ─────────────────── */
 function returnPlanetToBank(pid) {
   const existing = document.querySelector(`.planets-area .planet[data-pid="${pid}"]`);
-  if (!existing) return; // not in chart, nothing to do
+  if (!existing) return;
   existing.remove();
   delete planetData[pid];
   if (pid === 'Lagna') { lagnaSign = null; updateHouseNums(); }
-  // Append to bank in original order
   const bank = getEl('#planetBank');
   const el = buildPlanet(pid);
-  // Insert at correct position relative to other bank planets
   const after = ALL_PIDS.slice(ALL_PIDS.indexOf(pid) + 1)
     .map(id => bank.querySelector(`.planet[data-pid="${id}"]`))
     .find(Boolean);
   if (after) bank.insertBefore(el, after);
   else bank.appendChild(el);
+  detectYogas();
+  updateAspects();
 }
 
-/* ═══════════════════════════════════════════════════
-   UNIFIED POINTER EVENT DRAG & DROP
-   FIX #2: NO setPointerCapture (breaks elementsFromPoint on Android)
-   FIX #1: initDeg locked when direction is first decided, not at pointerdown
-   FIX #3: ghost sized via RAF before first position
-   FIX #4: drag flag suppresses click double-tap counter
-   FIX #10: source element is pointer-events:none while dragging
-   FIX #13: guard against multiple pointers overwriting dragState
-   ═══════════════════════════════════════════════════ */
-
+/* ═══ DRAG & DROP (Pointer Events) ═══ */
 const ghost = getEl('#drag-ghost');
-
 document.addEventListener('pointerdown', onPointerDown, {passive: false});
 document.addEventListener('pointermove', onPointerMove, {passive: false});
 document.addEventListener('pointerup',   onPointerUp,   {passive: false});
 document.addEventListener('pointercancel', onPointerCancel);
 
 function onPointerDown(e) {
-  // FIX #13: ignore extra pointers if a drag is already in progress
   if (dragState) return;
-
   const planetEl = e.target.closest('.planet');
   if (!planetEl) return;
   e.preventDefault();
-
-  const pid     = planetEl.dataset.pid;
+  const pid = planetEl.dataset.pid;
   const inChart = !!planetEl.closest('.planets-area');
   const inBank  = !!planetEl.closest('#planetBank');
-
   if (!inChart && !inBank) return;
-
   dragState = {
-    pid,
-    pointerId: e.pointerId,
-    sourceEl: planetEl,
-    startX: e.clientX,
-    startY: e.clientY,
-    moved: false,
-    isDegreeMode: false,
-    directionLocked: false,
-    initDeg: 0,        // FIX #1: set when direction is locked, not here
-    inChart,
-    ghostShown: false
+    pid, pointerId: e.pointerId, sourceEl: planetEl,
+    startX: e.clientX, startY: e.clientY,
+    moved: false, isDegreeMode: false, directionLocked: false,
+    initDeg: 0, inChart, ghostShown: false
   };
-  // FIX #2: Do NOT call setPointerCapture — we need elementsFromPoint to work
 }
 
 function onPointerMove(e) {
   if (!dragState || e.pointerId !== dragState.pointerId) return;
   e.preventDefault();
-
-  const dx   = e.clientX - dragState.startX;
-  const dy   = e.clientY - dragState.startY;
+  const dx = e.clientX - dragState.startX;
+  const dy = e.clientY - dragState.startY;
   const dist = Math.hypot(dx, dy);
-
-  if (dist < 5) return; // dead zone
+  if (dist < 5) return;
   dragState.moved = true;
-
-  // ── Direction lock (chart planets only) ──────────
   if (dragState.inChart && !dragState.directionLocked) {
     dragState.isDegreeMode    = Math.abs(dy) > Math.abs(dx);
     dragState.directionLocked = true;
-    // FIX #1: capture current degree NOW as the baseline
     dragState.initDeg = planetData[dragState.pid]?.degree ?? 0;
   }
-
-  // ── Degree adjustment (vertical slide) ───────────
   if (dragState.isDegreeMode) {
-    const delta  = (dragState.startY - e.clientY) / 22;
-    let newDeg   = dragState.initDeg + delta;
-    newDeg       = Math.max(0, Math.min(29.99, parseFloat(newDeg.toFixed(2))));
+    const delta = (dragState.startY - e.clientY) / 22;
+    let newDeg = dragState.initDeg + delta;
+    newDeg = Math.max(0, Math.min(29.99, parseFloat(newDeg.toFixed(2))));
     if (planetData[dragState.pid]) {
       planetData[dragState.pid].degree = newDeg;
       refreshPlanetContent(dragState.sourceEl);
@@ -1136,24 +1485,17 @@ function onPointerMove(e) {
     }
     return;
   }
-
-  // ── Drag-to-move ─────────────────────────────────
   if (!dragState.ghostShown) {
     dragState.ghostShown = true;
     dragState.sourceEl.classList.add('dragging');
-    // FIX #10: hide source from hit-testing while dragging
     dragState.sourceEl.style.pointerEvents = 'none';
     hideAllPanels();
-
-    // Build ghost
     const inner = dragState.sourceEl.cloneNode(true);
     inner.style.transform = 'none';
     inner.style.pointerEvents = 'none';
     ghost.innerHTML = '';
     ghost.appendChild(inner);
     ghost.style.display = 'block';
-
-    // FIX #3: position after RAF so browser has laid out ghost dimensions
     requestAnimationFrame(() => {
       const w = ghost.offsetWidth  || 50;
       const h = ghost.offsetHeight || 26;
@@ -1162,16 +1504,11 @@ function onPointerMove(e) {
     });
     return;
   }
-
-  // Update ghost position
   const w = ghost.offsetWidth  || 50;
   const h = ghost.offsetHeight || 26;
   ghost.style.left = (e.clientX - w / 2) + 'px';
   ghost.style.top  = (e.clientY - h / 2) + 'px';
-
-  // Highlight drop zone under finger
-  getAll('.cell.drop-active, .planet-bank.drop-active')
-    .forEach(el => el.classList.remove('drop-active'));
+  getAll('.cell.drop-active, .planet-bank.drop-active').forEach(el => el.classList.remove('drop-active'));
   const under = getDropTarget(e.clientX, e.clientY);
   if (under) under.classList.add('drop-active');
 }
@@ -1179,39 +1516,20 @@ function onPointerMove(e) {
 function onPointerUp(e) {
   if (!dragState || e.pointerId !== dragState.pointerId) return;
   e.preventDefault();
-
   cleanupDrag();
-
   const pid = dragState.pid;
-
-  // ── Tap (no movement) ────────────────────────────
   if (!dragState.moved) {
-    if (dragState.inChart && planetData[pid]) {
-      showRetroPanel(pid, e.clientX, e.clientY);
-    }
+    if (dragState.inChart && planetData[pid]) showRetroPanel(pid, e.clientX, e.clientY);
     dragState = null;
     return;
   }
-
-  // ── Degree adjustment finished ────────────────────
-  if (dragState.isDegreeMode) {
-    dragState = null;
-    return;
-  }
-
-  // ── Drop ──────────────────────────────────────────
-  // FIX #4: mark that we just finished a drag so click handler ignores it
+  if (dragState.isDegreeMode) { dragState = null; return; }
   lastDragEndTime = Date.now();
-
   const under = getDropTarget(e.clientX, e.clientY);
   if (under) {
-    if (under.id === 'planetBank') {
-      returnPlanetToBank(pid);
-    } else if (under.dataset.sign) {
-      movePlanetToSign(pid, under.dataset.sign);
-    }
+    if (under.id === 'planetBank') returnPlanetToBank(pid);
+    else if (under.dataset.sign) movePlanetToSign(pid, under.dataset.sign);
   }
-
   dragState = null;
 }
 
@@ -1224,20 +1542,16 @@ function onPointerCancel(e) {
 
 function cleanupDrag() {
   ghost.style.display = 'none';
-  ghost.innerHTML     = '';
-  getAll('.cell.drop-active, .planet-bank.drop-active')
-    .forEach(el => el.classList.remove('drop-active'));
+  ghost.innerHTML = '';
+  getAll('.cell.drop-active, .planet-bank.drop-active').forEach(el => el.classList.remove('drop-active'));
   if (dragState?.sourceEl) {
     dragState.sourceEl.classList.remove('dragging');
-    // FIX #10: restore pointer events on source
     dragState.sourceEl.style.pointerEvents = '';
   }
   hideTooltip();
 }
 
-/* FIX #2: no setPointerCapture → elementsFromPoint works correctly on Android */
 function getDropTarget(x, y) {
-  // Ghost already has pointer-events:none via CSS, source has it none via style
   const els = document.elementsFromPoint(x, y);
   for (const el of els) {
     const cell = el.closest('.cell[data-sign]');
@@ -1247,22 +1561,16 @@ function getDropTarget(x, y) {
   return null;
 }
 
-/* ─── Double-tap to return planet to bank ─────────
-   FIX #4: skip if we just finished a drag (click fires after pointerup)   */
+/* ─── Double-tap to return ──────────────────── */
 let lastTap = {pid: null, time: 0};
 
 document.addEventListener('click', (e) => {
-  // FIX #4: ignore click that fires right after a drag ends
   if (Date.now() - lastDragEndTime < 300) return;
-
   const planetEl = e.target.closest('.planet');
   if (!planetEl || !planetEl.closest('.planets-area')) return;
-
   const pid = planetEl.dataset.pid;
   const now = Date.now();
-
   if (lastTap.pid === pid && now - lastTap.time < 400) {
-    // Genuine double-tap → return to bank
     returnPlanetToBank(pid);
     hideAllPanels();
     lastTap = {pid: null, time: 0};
@@ -1271,7 +1579,7 @@ document.addEventListener('click', (e) => {
   }
 });
 
-/* ─── Sign label: tap/click to show info ─────── */
+/* ─── Sign label click ──────────────────────── */
 getAll('.sign-abbr').forEach(el => {
   el.addEventListener('mouseenter', (ev) => {
     if (!signsHidden) showSignPanel(el.dataset.sign, ev.clientX, ev.clientY);
@@ -1282,7 +1590,7 @@ getAll('.sign-abbr').forEach(el => {
   });
 });
 
-/* ─── Desktop planet hover tooltip ──────────── */
+/* ─── Desktop hover tooltip ─────────────────── */
 document.addEventListener('mousemove', (e) => {
   if (dragState) return;
   const planetEl = e.target.closest('.planet');
@@ -1293,7 +1601,44 @@ document.addEventListener('mousemove', (e) => {
   }
 });
 
-/* ─── Button controls ────────────────────────── */
+/* ─── Tabs ──────────────────────────────────── */
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    btn.classList.add('active');
+    const tabId = btn.dataset.tab;
+    document.getElementById(`tab-${tabId}`).classList.add('active');
+    if (tabId === 'aspects') updateAspects();
+    if (tabId === 'prompt') generatePrompt();
+  });
+});
+
+getEl('#btnGenPrompt').addEventListener('click', generatePrompt);
+
+getEl('#btnCopyPrompt').addEventListener('click', () => {
+  const text = getEl('#promptOutput').textContent;
+  if (!text) return;
+  navigator.clipboard.writeText(text).then(() => {
+    const toast = getEl('#copyToast');
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2200);
+  }).catch(() => {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    const toast = getEl('#copyToast');
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2200);
+  });
+});
+
+/* ─── Buttons ───────────────────────────────── */
 getEl('#btnSigns').addEventListener('click', () => {
   signsHidden = !signsHidden;
   getEl('#btnSigns').textContent = signsHidden ? T().showSigns : T().hideSigns;
@@ -1308,24 +1653,27 @@ getEl('#btnNums').addEventListener('click', () => {
 
 getEl('#btnClear').addEventListener('click', () => {
   getAll('.planets-area .planet').forEach(el => el.remove());
-  planetData    = {};
-  lagnaSign     = null;
-  signsHidden   = false;
-  numsHidden    = false;
-  dragState     = null;
+  planetData = {};
+  lagnaSign = null;
+  signsHidden = false;
+  numsHidden = false;
+  dragState = null;
   ghost.style.display = 'none';
-  rebuildBank();      // FIX #11: uses buildPlanet → respects current language
+  rebuildBank();
   applyLang();
+  detectYogas();
+  updateAspects();
+  getEl('#promptOutput').textContent = '';
   hideAllPanels();
 });
 
 getEl('#lang').addEventListener('change', (e) => {
   lang = e.target.value;
-  applyLang();        // refreshAllPlanets is called inside, updates bank symbols too
+  applyLang();
   hideAllPanels();
 });
 
-/* ─── Close panels on outside tap/click ─────── */
+/* ─── Close panels on outside tap ───────────── */
 document.addEventListener('pointerdown', (e) => {
   if (!retroPanel.classList.contains('visible') &&
       !signPanel.classList.contains('visible')) return;
@@ -1335,8 +1683,9 @@ document.addEventListener('pointerdown', (e) => {
   hideAllPanels();
 }, {capture: true});
 
-/* ─── Init ───────────────────────────────────── */
+/* ─── Init ──────────────────────────────────── */
 applyLang();
+detectYogas();
 </script>
 </body>
 </html>
